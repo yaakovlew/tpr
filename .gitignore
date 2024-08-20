@@ -25,3 +25,6 @@ go.work.sum
 .env
 
 backend/configs/config.yml
+
+# rubish
+.idea
