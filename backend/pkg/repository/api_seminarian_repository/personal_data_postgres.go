@@ -1,0 +1,38 @@
+package api_seminarian_repository
+
+import (
+	"backend/pkg/model"
+	"backend/pkg/repository/table_name"
+	"fmt"
+	"github.com/jmoiron/sqlx"
+)
+
+type SeminarianPersonalDataPostgres struct {
+	db *sqlx.DB
+}
+
+func NewSeminarianPersonalDataPostgres(db *sqlx.DB) *SeminarianPersonalDataPostgres {
+	return &SeminarianPersonalDataPostgres{db: db}
+}
+
+func (r *SeminarianPersonalDataPostgres) GetPersonalData(id int) (model.User, error) {
+	var user model.User
+	query := fmt.Sprintf("SELECT * FROM %s WHERE id = $1", table_name.UsersTable)
+	err := r.db.Get(&user, query, id)
+	if err != nil {
+		return model.User{}, err
+	}
+	return user, nil
+}
+
+func (r *SeminarianPersonalDataPostgres) UpdateName(id int, name string) error {
+	query := fmt.Sprintf("UPDATE %s SET name=$1 WHERE id = $2", table_name.UsersTable)
+	_, err := r.db.Exec(query, name, id)
+	return err
+}
+
+func (r *SeminarianPersonalDataPostgres) UpdateSurname(id int, surname string) error {
+	query := fmt.Sprintf("UPDATE %s SET surname=$1 WHERE id = $2", table_name.UsersTable)
+	_, err := r.db.Exec(query, surname, id)
+	return err
+}
