@@ -1,19 +1,21 @@
 package main
 
 import (
+	"context"
+	"os"
+	"os/signal"
+	"syscall"
+
 	"backend"
 	"backend/pkg/handler"
 	"backend/pkg/integrations"
 	"backend/pkg/repository"
 	"backend/pkg/service"
-	"context"
+
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
-	"os"
-	"os/signal"
-	"syscall"
 )
 
 // @title backend
