@@ -160,28 +160,58 @@
   </div>
   <q-dialog v-model="testsModal">
     <div class="add-group-modal flex column g-m q-pa-lg test-modal-tests">
-      <div class="text-primary test-title text-bolder">Тесты</div>
-      <q-list separator>
-        <q-item
-          v-for="test in tests"
-          :key="test.test_id"
-          class="text-primary flex column g-m q-px-none"
-        >
-          <div class="dialog-title">Название: {{ test.name }}</div>
-          <div class="dialog-title">Описание: {{ test.task_description }}</div>
-          <div class="dialog-title">Оценка: {{ test.default_mark }}</div>
-          <div class="dialog-title">
-            Длительность: {{ test.minutes_duration }}
-          </div>
-          <q-btn
-            label="Открыть тест"
-            color="primary"
-            flat
-            @click="openOpenTestModal(test.test_id)"
-          />
-        </q-item>
-      </q-list>
+    <div class="flex row">
+      <!-- Left Column: Тесты -->
+      <div class="flex column q-pa-md test-section">
+        <div class="text-primary test-title text-bolder">Тесты</div>
+        <q-list separator>
+          <q-item
+            v-for="test in tests"
+            :key="test.test_id"
+            class="text-primary flex column g-m q-px-none"
+          >
+            <div class="dialog-title">Название: {{ test.name }}</div>
+            <div class="dialog-title">Описание: {{ test.task_description }}</div>
+            <div class="dialog-title">Оценка: {{ test.default_mark }}</div>
+            <div class="dialog-title">
+              Длительность: {{ test.minutes_duration }} минут
+            </div>
+            <q-btn
+              label="Открыть тест"
+              color="primary"
+              flat
+              @click="openOpenTestModal(test.test_id)"
+            />
+          </q-item>
+        </q-list>
+      </div>
+
+      <!-- Right Column: Лабораторные работы -->
+      <div class="flex column q-pa-md lab-section">
+        <div class="text-primary test-title text-bolder">Лабораторные работы</div>
+        <q-list separator>
+          <q-item
+            v-for="lab in labs"
+            :key="lab.lab_id"
+            class="text-primary flex column g-m q-px-none"
+          >
+            <div class="dialog-title">Название: {{ lab.name }}</div>
+            <div class="dialog-title">Описание: {{ lab.task_description }}</div>
+            <div class="dialog-title">Сложность: {{ lab.difficulty }}</div>
+            <div class="dialog-title">
+              Ожидаемое время: {{ lab.expected_time }} часов
+            </div>
+            <q-btn
+              label="Открыть лабораторную работу"
+              color="primary"
+              flat
+              @click="openOpenTestModal(lab.lab_id)"
+            />
+          </q-item>
+        </q-list>
+      </div>
     </div>
+  </div>
   </q-dialog>
   <q-dialog
     v-model="openTestModal"
@@ -678,6 +708,68 @@ watch(disciplineId, async () => {
 </script>
 
 <style lang="scss" scoped>
+.add-group-modal {
+  max-width: 800px;
+  margin: auto;
+  background-color: white;
+  padding: 10px;
+}
+.flex {
+  display: flex;
+}
+.row {
+  flex-direction: row;
+}
+.column {
+  flex-direction: column;
+}
+.section-title {
+  margin-bottom: 16px;
+}
+.test-section {
+  flex: 1;
+  border-right: 1px solid #ccc;
+  padding-right: 16px;
+}
+.lab-section {
+  flex: 1;
+  padding-left: 16px;
+}
+.dialog-title {
+  margin-bottom: 8px;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 .modal {
   background-color: white;
   min-width: 650px;
@@ -706,11 +798,11 @@ watch(disciplineId, async () => {
   }
 }
 
-.add-group-modal {
-  width: 300px;
-  background-color: white;
-  padding: 10px;
-}
+// .add-group-modal {
+//   width: 300px;
+//   background-color: white;
+//   padding: 10px;
+// }
 
 .dialog-title {
   font-weight: 500;
