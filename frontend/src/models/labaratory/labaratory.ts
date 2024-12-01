@@ -11,6 +11,16 @@ export namespace ILabaratory {
     token: string;
   }
 
+  export interface EditLabaratory {
+    name: string;
+    description: string;
+    name_en: string;
+    description_en: string;
+    laboratory_id: string;
+    // token: string | null;
+    // linc: string  | null;
+  }
+
   export interface Labaratory {
     laboratory_id: number;
     name: string;

@@ -17,6 +17,11 @@ export const LabsService = {
   deleteLab: useServiceAction((id: number) =>
     $apiLecturer.delete(`/laboratory-work/${id}`)
   ),
+  editLab: useServiceAction((data: ILabaratory.EditLabaratory) => {
+    const queryParams = new URLSearchParams(data as unknown as Record<string, string>).toString();
+    console.log(queryParams)
+    return $apiLecturer.put(`/laboratory-work/external?${queryParams}`);
+  }),
   getLabsFromSectionSeminarian: useServiceAction((id: number) =>
     $apiSemianrian.get<ILabaratory.GetLabs>(`/discipline/laboratory-work/${id}`)
   ),

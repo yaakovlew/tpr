@@ -36,6 +36,11 @@ export const useLabsStore = defineStore('labs', () => {
     await LabsService.deleteLab(id);
   };
 
+  const editLab = async (data: ILabaratory.EditLabaratory) => {
+    await LabsService.editLab(data);
+  };
+
+
   return {
     addLab,
     getLabs,
@@ -44,5 +49,6 @@ export const useLabsStore = defineStore('labs', () => {
     sectionLabs,
     deleteLab,
     getLabsFromSectionReturn,
+    editLab,
   };
 });

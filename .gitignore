@@ -28,3 +28,5 @@ backend/configs/config.yml
 
 # rubish
 .idea
+.database
+backend/src/test
