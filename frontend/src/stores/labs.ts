@@ -6,6 +6,7 @@ import { ref } from 'vue';
 export const useLabsStore = defineStore('labs', () => {
   const labs = ref<ILabaratory.ExternalLabaratory[] | null>(null);
   const sectionLabs = ref<ILabaratory.ExternalLaboratorySection[] | null>(null);
+  const studentsOpenedLab = ref<ILabaratory.StudentOpenLab[]>([]);
 
   const addLab = async (lab: ILabaratory.AddLabaratory) => {
     await LabsService.addLabaratory(lab);
@@ -20,6 +21,7 @@ export const useLabsStore = defineStore('labs', () => {
 
   const getLabsFromSection = async (id: number) => {
     const res = await LabsService.getLabsFromSection(id);
+    console.log('res: ', res)
     if (res.data) {
       sectionLabs.value = res.data.labs;
     }
@@ -40,6 +42,12 @@ export const useLabsStore = defineStore('labs', () => {
     await LabsService.editLab(data);
   };
 
+  const getStudentsOpenLabs = async (id: number) => {
+    const res = await LabsService.getStudentsOpenLab(id);
+    if (res.data) {
+      studentsOpenedLab.value = res.data.students;
+    }
+  };
 
   return {
     addLab,
@@ -50,5 +58,6 @@ export const useLabsStore = defineStore('labs', () => {
     deleteLab,
     getLabsFromSectionReturn,
     editLab,
+    getStudentsOpenLabs,
   };
 });

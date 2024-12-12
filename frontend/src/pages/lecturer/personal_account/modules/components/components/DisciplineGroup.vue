@@ -138,7 +138,7 @@
           </div>
           <q-icon
             name="list"
-            @click="getSectionTests(section.section_id)"
+            @click="getSectionTestsAndLabs(section.section_id)"
             size="26px"
             class="cursor-pointer"
           />
@@ -164,7 +164,7 @@
       <!-- Left Column: Тесты -->
       <div class="flex column q-pa-md test-section">
         <div class="text-primary test-title text-bolder">Тесты</div>
-        <q-list separator>
+        <q-list v-if="tests && tests.length > 0" separator>
           <q-item
             v-for="test in tests"
             :key="test.test_id"
@@ -184,31 +184,38 @@
             />
           </q-item>
         </q-list>
+
+        <div v-else class="text-center text-grey-7 q-mt-md">
+          Нет тестов
+        </div>
       </div>
 
       <!-- Right Column: Лабораторные работы -->
       <div class="flex column q-pa-md lab-section">
         <div class="text-primary test-title text-bolder">Лабораторные работы</div>
-        <q-list separator>
+
+        <!-- Show labs if available -->
+        <q-list separator v-if="labs && labs.length > 0">
           <q-item
             v-for="lab in labs"
-            :key="lab.lab_id"
+            :key="lab.laboratory_id"
             class="text-primary flex column g-m q-px-none"
           >
             <div class="dialog-title">Название: {{ lab.name }}</div>
             <div class="dialog-title">Описание: {{ lab.task_description }}</div>
-            <div class="dialog-title">Сложность: {{ lab.difficulty }}</div>
-            <div class="dialog-title">
-              Ожидаемое время: {{ lab.expected_time }} часов
-            </div>
             <q-btn
               label="Открыть лабораторную работу"
               color="primary"
               flat
-              @click="openOpenTestModal(lab.lab_id)"
+              @click="openOpenLabModal(lab.laboratory_id)"
             />
           </q-item>
         </q-list>
+
+        <!-- Show message if no labs -->
+        <div v-else class="text-center text-grey-7 q-mt-md">
+          Нет лабораторных работ
+        </div>
       </div>
     </div>
   </div>
@@ -336,6 +343,7 @@ import { useGroupsStore } from 'src/stores/groups';
 import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
 import { useSectionStore } from 'src/stores/section';
 import { useTestsStore } from 'src/stores/test';
+import { useLabsStore } from 'src/stores/labs';
 
 const route = useRoute();
 
@@ -392,19 +400,27 @@ sectionStore.getSections(Number(disciplineId.value));
 const sections = computed(() => sectionStore.sections);
 
 const testsStore = useTestsStore();
+const labsStore = useLabsStore();
+
 
 const tests = computed(() => testsStore.sectionTests);
+const labs = computed(() => labsStore.sectionLabs);
 
 const testsModal = ref(false);
 
 const selectedTest = ref(0);
+const selectedLab = ref(0);
 
-const getSectionTests = async (id: number) => {
+
+const getSectionTestsAndLabs = async (id: number) => {
   testsModal.value = true;
   await testsStore.getSectionTests(id);
+  await labsStore.getLabsFromSection(id);
 };
 
 const openTestModal = ref(false);
+const openLabModal = ref(false);
+
 
 const sortedSeminars: ComputedRef<ISeminar[]> = computed(() => {
   if (seminars.value) {
@@ -515,6 +531,11 @@ const closeAddLessonModal = () => {
 
 const closeOpenTestModal = () => {
   openTestModal.value = false;
+  testDate.value = getDate();
+};
+
+const closeOpenLabModal = () => {
+  openLabModal.value = false;
   testDate.value = getDate();
 };
 
@@ -653,6 +674,15 @@ const openOpenTestModal = async (testId: number) => {
   selectedTest.value = testId;
   openTestModal.value = true;
 };
+
+const openOpenLabModal = async (labId: number) => {
+  await testsStore.getStudentsOpenLabs(labId);
+  await groupStore.getGroupStudents(String(groupId.value));
+
+  selectedLab.value = labId;
+  openLabModal.value = true;
+};
+
 
 const createTest = async () => {
   const dateParse = new Date();

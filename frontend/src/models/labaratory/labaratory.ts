@@ -60,4 +60,16 @@ export namespace ILabaratory {
     Ru: ExternalLabaratory[];
     En: ExternalLabaratory[];
   }
+
+  export interface StudentOpenLab {
+    student_id: number;
+    name: string;
+    surname: string;
+    group_name: string;
+    closed_date: number
+  }
+
+  export interface GetStudentsOpenLab {
+    students: StudentOpenLab[];
+  }
 }

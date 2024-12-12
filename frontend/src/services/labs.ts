@@ -25,4 +25,9 @@ export const LabsService = {
   getLabsFromSectionSeminarian: useServiceAction((id: number) =>
     $apiSemianrian.get<ILabaratory.GetLabs>(`/discipline/laboratory-work/${id}`)
   ),
+  getStudentsOpenLab: useServiceAction((id: number) =>
+    $apiLecturer.get<ILabaratory.GetStudentsOpenLab>(
+      `/laboratory-work/students?is_done=0&test_id=${id}`
+    )
+  ),
 };
