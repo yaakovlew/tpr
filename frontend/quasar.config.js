@@ -63,7 +63,7 @@ module.exports = configure(function (/* ctx */) {
       // publicPath: '/',
       // analyze: true,
       env: {
-        BASE_URL: 'http://soft-computing.na4u.ru',
+        BASE_URL: 'http://localhost:8000',
       },
       // rawDefine: {}
       // ignorePublicFolder: true,
