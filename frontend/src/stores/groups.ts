@@ -7,6 +7,7 @@ import { IFutureResource } from 'src/utils/service/action';
 import { Ref, ref } from 'vue';
 import { TestService } from '../services/test';
 import { useTestsStore } from 'src/stores/test';
+import { useLabsStore } from './labs';
 
 export const useGroupsStore = defineStore('groups', () => {
   const groups: Ref<IGroup[] | null> = ref(null);
@@ -15,6 +16,7 @@ export const useGroupsStore = defineStore('groups', () => {
   const commonGroups: Ref<IGroup[] | null> = ref(null);
   const seminarians: Ref<ISeminarian.Seminarian[] | null> = ref(null);
   const testStore = useTestsStore();
+  const labStore = useLabsStore();
   const seminarianGroups: Ref<IGroup[] | null> = ref(null);
   const seminarianGroupStudnets: Ref<IGroup.GroupStudentStudentId[] | null> =
     ref(null);
@@ -148,6 +150,24 @@ export const useGroupsStore = defineStore('groups', () => {
     }
   };
 
+  const openLabForStudents = async (
+    groupId: number[],
+    labId: number,
+    date: number
+  ) => {
+    const openPromise: Promise<void>[] = [];
+    groupId.forEach((id) => {
+      openPromise.push(
+        labStore.openLab({
+          user_id: Number(id),
+          laboratory_id: labId,
+          date,
+        })
+      );
+    });
+    await Promise.all(openPromise);
+  };
+
   return {
     groups,
     groupStudents,
@@ -168,5 +188,6 @@ export const useGroupsStore = defineStore('groups', () => {
     getSeminarianGroups,
     getSeminarianStudentsFromGroup,
     seminarianGroupStudnets,
+    openLabForStudents,
   };
 });

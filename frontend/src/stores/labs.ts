@@ -49,6 +49,10 @@ export const useLabsStore = defineStore('labs', () => {
     }
   };
 
+  const openLab = async (data: ILabaratory.OpenLab) => {
+    await LabsService.openLab(data);
+  };
+
   return {
     addLab,
     getLabs,
@@ -60,5 +64,6 @@ export const useLabsStore = defineStore('labs', () => {
     editLab,
     getStudentsOpenLabs,
     studentsOpenedLab,
+    openLab,
   };
 });

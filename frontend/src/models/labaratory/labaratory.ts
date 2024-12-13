@@ -72,4 +72,10 @@ export namespace ILabaratory {
   export interface GetStudentsOpenLab {
     students: StudentOpenLab[];
   }
+
+  export interface OpenLab {
+    date: number;
+    laboratory_id: number;
+    user_id: number;
+  }
 }

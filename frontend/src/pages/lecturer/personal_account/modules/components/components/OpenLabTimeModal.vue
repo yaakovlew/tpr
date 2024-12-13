@@ -116,8 +116,8 @@ import { useLabsStore } from 'src/stores/labs';
 
 const props = defineProps<{
   modelValue: boolean;
+  selectedLab: number;
 }>();
-
 const route = useRoute();
 
 const tab = ref('open');
@@ -173,7 +173,7 @@ sectionStore.getSections(Number(disciplineId.value));
 
 const labsStore = useLabsStore();
 
-const selectedLab = ref(0);
+// const selectedLab = ref(0);
 
 const modelValue = ref(props.modelValue);
 
@@ -281,6 +281,8 @@ const checkAllStudents = (students: Record<number, boolean>) => {
 };
 
 const createLab = async () => {
+  console.log('selected lab ', props.selectedLab)
+
   const dateParse = new Date();
   dateParse.setDate(Number(labDate.value[0] + labDate.value[1]));
   dateParse.setMonth(Number(labDate.value[3] + labDate.value[4]) - 1);
@@ -303,10 +305,10 @@ const createLab = async () => {
   );
   await groupStore.openLabForStudents(
     studentsIds,
-    Number(selectedLab.value),
+    Number(props.selectedLab),
     Math.floor(dateParse.getTime() / 1000)
   );
-  await labsStore.getStudentsOpenLabs(Number(selectedLab.value));
+  await labsStore.getStudentsOpenLabs(Number(props.selectedLab));
 
   closeOpenLabModal();
 };
@@ -318,9 +320,9 @@ const closeLab = async () => {
   );
   await groupStore.closeLabForStudents(
     studentsIds,
-    Number(selectedLab.value)
+    Number(props.selectedLab)
   );
-  await labsStore.getStudentsOpenLabs(Number(selectedLab.value));
+  await labsStore.getStudentsOpenLabs(Number(props.selectedLab));
 
   closeOpenLabModal();
 };

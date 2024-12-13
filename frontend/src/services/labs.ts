@@ -30,4 +30,8 @@ export const LabsService = {
       `/laboratory-work/students?is_done=0&laboratory_id=${id}`
     )
   ),
+  openLab: useServiceAction((data: ILabaratory.OpenLab) =>{
+    return $apiLecturer.post('/laboratory-work/activity', data)
+  }
+  ),
 };

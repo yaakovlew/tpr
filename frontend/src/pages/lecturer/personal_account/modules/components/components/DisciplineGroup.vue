@@ -227,7 +227,7 @@
     transition-show="scale"
     transition-hide="scale"
   >
-    <open-lab-time-modal v-model="openLabModal"/>
+    <open-lab-time-modal v-model="openLabModal" :selected-lab="selectedLab"/>
 
   </q-dialog>
 
