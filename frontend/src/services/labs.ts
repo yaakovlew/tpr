@@ -27,7 +27,7 @@ export const LabsService = {
   ),
   getStudentsOpenLab: useServiceAction((id: number) =>
     $apiLecturer.get<ILabaratory.GetStudentsOpenLab>(
-      `/laboratory-work/students?is_done=0&test_id=${id}`
+      `/laboratory-work/students?is_done=0&laboratory_id=${id}`
     )
   ),
 };

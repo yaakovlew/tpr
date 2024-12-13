@@ -220,7 +220,10 @@
     </div>
   </div>
   </q-dialog>
-  <q-dialog
+  <section-work>
+
+  </section-work>
+  <!-- <q-dialog
     v-model="openTestModal"
     transition-show="scale"
     transition-hide="scale"
@@ -319,7 +322,7 @@
         </q-tab-panel>
       </q-tab-panels>
     </div>
-  </q-dialog>
+  </q-dialog> -->
 </template>
 
 <script lang="ts" setup>
@@ -341,6 +344,7 @@ import { ISeminar, ILesson } from 'src/models/attendance/attendance';
 import { useReportStore } from '../../../../../../stores/report';
 import { useGroupsStore } from 'src/stores/groups';
 import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
+import SectionWork from './SectionWork.vue';
 import { useSectionStore } from 'src/stores/section';
 import { useTestsStore } from 'src/stores/test';
 import { useLabsStore } from 'src/stores/labs';
@@ -676,7 +680,7 @@ const openOpenTestModal = async (testId: number) => {
 };
 
 const openOpenLabModal = async (labId: number) => {
-  await testsStore.getStudentsOpenLabs(labId);
+  await labsStore.getStudentsOpenLabs(labId);
   await groupStore.getGroupStudents(String(groupId.value));
 
   selectedLab.value = labId;
@@ -768,36 +772,6 @@ watch(disciplineId, async () => {
 .dialog-title {
   margin-bottom: 8px;
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 .modal {
