@@ -78,4 +78,10 @@ export namespace ILabaratory {
     laboratory_id: number;
     user_id: number;
   }
+
+  export interface CloseLab {
+    laboratory_id: number;
+    user_id: number;
+  }
+
 }

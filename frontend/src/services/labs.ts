@@ -34,4 +34,9 @@ export const LabsService = {
     return $apiLecturer.post('/laboratory-work/activity', data)
   }
   ),
+  closeLab: useServiceAction((data: ILabaratory.CloseLab) =>
+    $apiLecturer.delete(
+      `/laboratory-work/activity?laboratory_id=${data.laboratory_id}&user_id=${data.user_id}`
+    )
+  ),
 };

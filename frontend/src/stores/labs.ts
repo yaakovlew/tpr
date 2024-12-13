@@ -53,6 +53,9 @@ export const useLabsStore = defineStore('labs', () => {
     await LabsService.openLab(data);
   };
 
+  const closeLab = async (data: ILabaratory.CloseLab) => {
+    await LabsService.closeLab(data);
+  };
   return {
     addLab,
     getLabs,
@@ -65,5 +68,6 @@ export const useLabsStore = defineStore('labs', () => {
     getStudentsOpenLabs,
     studentsOpenedLab,
     openLab,
+    closeLab,
   };
 });

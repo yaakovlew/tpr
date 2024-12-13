@@ -168,6 +168,18 @@ export const useGroupsStore = defineStore('groups', () => {
     await Promise.all(openPromise);
   };
 
+  const closeLabForStudents = async (groupId: number[], labId: number) => {
+    const openPromise: Promise<void>[] = [];
+    groupId.forEach((id) => {
+      openPromise.push(
+        labStore.closeLab({
+          user_id: Number(id),
+          laboratory_id: labId,
+        })
+      );
+    });
+    await Promise.all(openPromise);
+  };
   return {
     groups,
     groupStudents,
@@ -189,5 +201,6 @@ export const useGroupsStore = defineStore('groups', () => {
     getSeminarianStudentsFromGroup,
     seminarianGroupStudnets,
     openLabForStudents,
+    closeLabForStudents,
   };
 });
