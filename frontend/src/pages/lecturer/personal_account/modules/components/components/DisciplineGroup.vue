@@ -220,15 +220,17 @@
     </div>
   </div>
   </q-dialog>
-  <section-work>
+  <!-- <section-work v-model="openTestModal"/> -->
 
-  </section-work>
-  <!-- <q-dialog
+  <!-- </section-work> -->
+  <q-dialog
     v-model="openTestModal"
     transition-show="scale"
     transition-hide="scale"
   >
-    <div class="test-modal">
+    <section-work v-model="openTestModal"/>
+
+    <!-- <div class="test-modal">
       <q-tabs
         v-model="tab"
         dense
@@ -321,8 +323,8 @@
           </div>
         </q-tab-panel>
       </q-tab-panels>
-    </div>
-  </q-dialog> -->
+    </div> -->
+  </q-dialog>
 </template>
 
 <script lang="ts" setup>

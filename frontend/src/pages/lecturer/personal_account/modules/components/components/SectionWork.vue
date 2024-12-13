@@ -1,9 +1,4 @@
 <template>
-    <q-dialog
-    v-model="openTestModal"
-    transition-show="scale"
-    transition-hide="scale"
-  >
     <div class="test-modal">
       <q-tabs
         v-model="tab"
@@ -98,7 +93,6 @@
         </q-tab-panel>
       </q-tab-panels>
     </div>
-  </q-dialog>
 </template>
 
 
@@ -122,9 +116,7 @@ import { useTestsStore } from 'src/stores/test';
 import { useLabsStore } from 'src/stores/labs';
 
 const props = defineProps<{
-  modelValue: ICreateDiscipne;
-  typeOptions: string[];
-  sectionOptions: string[];
+  modelValue: boolean;
 }>();
 
 const route = useRoute();
@@ -190,7 +182,7 @@ const testsModal = ref(false);
 const selectedTest = ref(0);
 const selectedLab = ref(0);
 
-const openTestModal = ref(false);
+const modelValue = ref(props.modelValue);
 const openLabModal = ref(false);
 
 const disciplineIdNumber = computed(() => {
@@ -229,7 +221,7 @@ onMounted(async () => {
 });
 
 const closeOpenTestModal = () => {
-  openTestModal.value = false;
+  modelValue.value = false;
   testDate.value = getDate();
 };
 
