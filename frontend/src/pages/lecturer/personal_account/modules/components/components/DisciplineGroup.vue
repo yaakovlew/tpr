@@ -228,7 +228,7 @@
     transition-show="scale"
     transition-hide="scale"
   >
-    <section-work v-model="openTestModal"/>
+    <open-test-time-modal v-model="openTestModal"/>
 
     <!-- <div class="test-modal">
       <q-tabs
@@ -346,7 +346,7 @@ import { ISeminar, ILesson } from 'src/models/attendance/attendance';
 import { useReportStore } from '../../../../../../stores/report';
 import { useGroupsStore } from 'src/stores/groups';
 import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
-import SectionWork from './SectionWork.vue';
+import OpenTestTimeModal from './OpenTestTimeModal.vue';
 import { useSectionStore } from 'src/stores/section';
 import { useTestsStore } from 'src/stores/test';
 import { useLabsStore } from 'src/stores/labs';
