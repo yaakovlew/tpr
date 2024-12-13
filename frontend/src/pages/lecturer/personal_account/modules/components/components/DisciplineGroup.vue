@@ -222,13 +222,22 @@
   </q-dialog>
   <!-- <section-work v-model="openTestModal"/> -->
 
+  <q-dialog
+    v-model="openLabModal"
+    transition-show="scale"
+    transition-hide="scale"
+  >
+    <open-lab-time-modal v-model="openLabModal"/>
+
+  </q-dialog>
+
   <!-- </section-work> -->
   <q-dialog
     v-model="openTestModal"
     transition-show="scale"
     transition-hide="scale"
   >
-    <open-test-time-modal v-model="openTestModal"/>
+    <open-test-time-modal v-model="openTestModal"  />
 
     <!-- <div class="test-modal">
       <q-tabs
@@ -347,6 +356,7 @@ import { useReportStore } from '../../../../../../stores/report';
 import { useGroupsStore } from 'src/stores/groups';
 import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
 import OpenTestTimeModal from './OpenTestTimeModal.vue';
+import OpenLabTimeModal from './OpenLabTimeModal.vue';
 import { useSectionStore } from 'src/stores/section';
 import { useTestsStore } from 'src/stores/test';
 import { useLabsStore } from 'src/stores/labs';

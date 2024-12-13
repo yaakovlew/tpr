@@ -1,5 +1,5 @@
 <template>
-    <div class="test-modal">
+    <div class="lab-modal">
       <q-tabs
         v-model="tab"
         dense
@@ -22,11 +22,11 @@
                 label="Отметить всех студентов"
                 @click="checkAllStudents(studentsClosedModel)"
                 v-if="
-                  studentsWithClosedTest && studentsWithClosedTest.length > 0
+                  studentsWithClosedLab && studentsWithClosedLab.length > 0
                 "
               />
               <q-item
-                v-for="student in studentsWithClosedTest"
+                v-for="student in studentsWithClosedLab"
                 :key="student.student_id"
                 class="q-px-none full-width"
               >
@@ -43,19 +43,19 @@
             <div class="flex column g-m">
               <div class="flex g-m">
                 <q-date
-                  v-model="testDate"
+                  v-model="labDate"
                   :mask="mask"
                   color="purple"
                   :locale="myLocale"
                 />
                 <q-time
-                  v-model="testDate"
+                  v-model="labDate"
                   :mask="mask"
                   color="purple"
                   format24h
                 />
               </div>
-              <q-btn label="Открыть" @click="createTest" />
+              <q-btn label="Открыть" @click="createLab" />
             </div>
           </div>
         </q-tab-panel>
@@ -65,7 +65,7 @@
             <q-list separator>
               <q-btn
                 v-if="
-                  studentsWithOpenedTest && studentsWithOpenedTest.length > 0
+                  studentsWithOpenedLab && studentsWithOpenedLab.length > 0
                 "
                 flat
                 color="primary"
@@ -73,7 +73,7 @@
                 @click="checkAllStudents(studentsOpenedModel)"
               />
               <q-item
-                v-for="student in studentsWithOpenedTest"
+                v-for="student in studentsWithOpenedLab"
                 :key="student.student_id"
                 class="q-px-none full-width"
               >
@@ -88,7 +88,7 @@
               </q-item>
             </q-list>
 
-            <q-btn label="Закрыть" @click="closeTest" />
+            <q-btn label="Закрыть" @click="closeLab" />
           </div>
         </q-tab-panel>
       </q-tab-panels>
@@ -112,7 +112,7 @@ import { useAttendanceStore } from 'src/stores/attendance';
 import { ILesson } from 'src/models/attendance/attendance';
 import { useGroupsStore } from 'src/stores/groups';
 import { useSectionStore } from 'src/stores/section';
-import { useTestsStore } from 'src/stores/test';
+import { useLabsStore } from 'src/stores/labs';
 
 const props = defineProps<{
   modelValue: boolean;
@@ -171,9 +171,9 @@ const sectionStore = useSectionStore();
 sectionStore.getSections(Number(disciplineId.value));
 
 
-const testsStore = useTestsStore();
+const labsStore = useLabsStore();
 
-const selectedTest = ref(0);
+const selectedLab = ref(0);
 
 const modelValue = ref(props.modelValue);
 
@@ -212,9 +212,9 @@ onMounted(async () => {
   }
 });
 
-const closeOpenTestModal = () => {
+const closeOpenLabModal = () => {
   modelValue.value = false;
-  testDate.value = getDate();
+  labDate.value = getDate();
 };
 
 const getDate = () => {
@@ -223,11 +223,7 @@ const getDate = () => {
   return newDate.toLocaleString('ru');
 };
 
-const seminarName = ref('');
-const lessonName: Ref<ILesson | null> = ref(null);
-const seminarDate = ref(getDate());
-const lessonDate = ref(getDate());
-const testDate = ref(getDate());
+const labDate = ref(getDate());
 
 const myLocale = {
   /* starting with Sunday */
@@ -247,16 +243,16 @@ const myLocale = {
 
 const mask = 'DD.MM.YYYY, HH:mm:ss';
 
-const studentsOpenedTest = computed(() => testsStore.studentsOpenedTest);
+const studentsOpenedLab = computed(() => labsStore.studentsOpenedLab);
 const groupStudents = computed(() => groupStore.groupStudents);
 
 const studentsClosedModel: Record<number, boolean> = reactive({});
 const studentsOpenedModel: Record<number, boolean> = reactive({});
 
-const studentsWithClosedTest = computed(() => {
+const studentsWithClosedLab = computed(() => {
   const res = groupStudents.value?.filter(
     (student) =>
-      !studentsOpenedTest.value?.find(
+      !studentsOpenedLab.value?.find(
         (st) => Number(student.student_id) === st.student_id
       )
   );
@@ -266,8 +262,8 @@ const studentsWithClosedTest = computed(() => {
   return res;
 });
 
-const studentsWithOpenedTest = computed(() => {
-  const res = studentsOpenedTest.value?.filter((student) =>
+const studentsWithOpenedLab = computed(() => {
+  const res = studentsOpenedLab.value?.filter((student) =>
     groupStudents.value?.find(
       (st) => Number(st.student_id) === student.student_id
     )
@@ -284,49 +280,49 @@ const checkAllStudents = (students: Record<number, boolean>) => {
   });
 };
 
-const createTest = async () => {
+const createLab = async () => {
   const dateParse = new Date();
-  dateParse.setDate(Number(testDate.value[0] + testDate.value[1]));
-  dateParse.setMonth(Number(testDate.value[3] + testDate.value[4]) - 1);
+  dateParse.setDate(Number(labDate.value[0] + labDate.value[1]));
+  dateParse.setMonth(Number(labDate.value[3] + labDate.value[4]) - 1);
   dateParse.setFullYear(
     Number(
-      testDate.value[6] +
-        testDate.value[7] +
-        testDate.value[8] +
-        testDate.value[9]
+      labDate.value[6] +
+        labDate.value[7] +
+        labDate.value[8] +
+        labDate.value[9]
     )
   );
   dateParse.setHours(
-    Number(testDate.value[12] + testDate.value[13]),
-    Number(testDate.value[15] + testDate.value[16]),
-    Number(testDate.value[18] + testDate.value[19])
+    Number(labDate.value[12] + labDate.value[13]),
+    Number(labDate.value[15] + labDate.value[16]),
+    Number(labDate.value[18] + labDate.value[19])
   );
   const studentsIds: number[] = [];
   Object.entries(studentsClosedModel).forEach((value) =>
     value[1] ? studentsIds.push(Number(value[0])) : null
   );
-  await groupStore.openTestForStudents(
+  await groupStore.openLabForStudents(
     studentsIds,
-    Number(selectedTest.value),
+    Number(selectedLab.value),
     Math.floor(dateParse.getTime() / 1000)
   );
-  await testsStore.getStudentsOpenTest(Number(selectedTest.value));
+  await labsStore.getStudentsOpenLabs(Number(selectedLab.value));
 
-  closeOpenTestModal();
+  closeOpenLabModal();
 };
 
-const closeTest = async () => {
+const closeLab = async () => {
   const studentsIds: number[] = [];
   Object.entries(studentsOpenedModel).forEach((value) =>
     value[1] ? studentsIds.push(Number(value[0])) : null
   );
-  await groupStore.closeTestForStudents(
+  await groupStore.closeLabForStudents(
     studentsIds,
-    Number(selectedTest.value)
+    Number(selectedLab.value)
   );
-  await testsStore.getStudentsOpenTest(Number(selectedTest.value));
+  await labsStore.getStudentsOpenLabs(Number(selectedLab.value));
 
-  closeOpenTestModal();
+  closeOpenLabModal();
 };
 
 watch(disciplineId, async () => {
@@ -356,12 +352,15 @@ watch(disciplineId, async () => {
 .section-title {
   margin-bottom: 16px;
 }
-.test-section {
+.lab-section {
   flex: 1;
   border-right: 1px solid #ccc;
   padding-right: 16px;
 }
-
+.lab-section {
+  flex: 1;
+  padding-left: 16px;
+}
 .dialog-title {
   margin-bottom: 8px;
 }
@@ -373,23 +372,23 @@ watch(disciplineId, async () => {
   padding: 10px 20px;
 }
 
-.test-modal {
+.lab-modal {
   background-color: white;
   min-width: 950px;
   padding: 10px 20px;
 }
 
-.test-modal-test {
+.lab-modal-lab {
   min-width: 500px;
 }
 
 @media screen and (max-width: 600px) {
-  .test-modal {
+  .lab-modal {
     width: 90vw;
     min-width: 0;
   }
 
-  .test-modal-test {
+  .lab-modal-lab {
     width: 90vw;
     min-width: none;
   }
@@ -406,7 +405,7 @@ watch(disciplineId, async () => {
   font-size: 18px;
 }
 
-.test-title {
+.lab-title {
   font-weight: 600;
   font-size: 20px;
 }

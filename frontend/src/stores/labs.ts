@@ -59,5 +59,6 @@ export const useLabsStore = defineStore('labs', () => {
     getLabsFromSectionReturn,
     editLab,
     getStudentsOpenLabs,
+    studentsOpenedLab,
   };
 });
