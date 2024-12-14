@@ -104,6 +104,8 @@ import { useDisciplinesStore } from 'src/stores/disciplines';
 import { useReportStore } from 'src/stores/report';
 import { download } from 'src/utils/download';
 import { IGroup } from 'src/models/group/group';
+import { ILabaratory } from 'src/models/labaratory/labaratory';
+import { useLabsStore } from 'src/stores/labs';
 
 const route = useRoute();
 
@@ -145,10 +147,12 @@ const getReport = async () => {
 const store = useMarksStore();
 const groupStore = useGroupsStore();
 const testsStore = useTestsStore();
+const labsStore = useLabsStore();
 const sectionStore = useSectionStore();
 const disciplineStore = useDisciplinesStore();
 
 const allSectionsTests = computed(() => testsStore.allSectionsTests);
+const allSectionsLabs = computed(() => labsStore.allSectionsLabs);
 const tests = computed(() => testsStore.sectionTests);
 const sections = computed(() => sectionStore.sections);
 const students = computed(() => groupStore.groupStudents);
@@ -249,6 +253,17 @@ const rows = computed(() => {
 const allTests = computed(() => {
   const array = Object.values(allSectionsTests.value)?.map((tests) => tests);
   const res: ITest.Test[] = [];
+  array?.forEach((arr) => {
+    if (arr) {
+      res.push(...arr);
+    }
+  });
+  return res;
+});
+
+const allLabs = computed(() => {
+  const array = Object.values(allSectionsLabs.value)?.map((labs) => labs);
+  const res: ILabaratory.Labaratory[] = [];
   array?.forEach((arr) => {
     if (arr) {
       res.push(...arr);
