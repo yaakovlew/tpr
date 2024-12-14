@@ -7,7 +7,7 @@ export const useLabsStore = defineStore('labs', () => {
   const labs = ref<ILabaratory.ExternalLabaratory[] | null>(null);
   const sectionLabs = ref<ILabaratory.ExternalLaboratorySection[] | null>(null);
   const studentsOpenedLab = ref<ILabaratory.StudentOpenLab[]>([]);
-  const allSectionsLabs = ref<Record<number, ILabaratory.Labaratory[]>>([]);
+  const allSectionsLabs = ref<Record<number, ILabaratory.GetLabsFromSection>>({});
 
   const addLab = async (lab: ILabaratory.AddLabaratory) => {
     await LabsService.addLabaratory(lab);
@@ -59,24 +59,30 @@ export const useLabsStore = defineStore('labs', () => {
   };
 
   const getSectionLabs = async (id: number) => {
-    const res = await LabsService.getSectionLabs(id);
+    const res = await LabsService.getLabsFromSection(id);
+    console.log('got res http: ', res.data)
     if (res.data) {
-      sectionLabs.value = res.data.ru;
+      sectionLabs.value = res.data.labs;
     }
     return { data: res.data, id };
   };
 
   const getAllSectionsLabs = async (id: number[]) => {
-    const promises: Promise<any>[] = [];
+    console.log('in getAllSectionsLabs')
+    const promises: Promise<{data: ILabaratory.GetLabsFromSection | undefined; id: number;}>[] = [];
     id.forEach((id) => {
       promises.push(getSectionLabs(id));
     });
     const res = await Promise.all(promises);
     allSectionsLabs.value = {};
     if (res) {
-      res.forEach((r) => {
-        allSectionsLabs.value[r.id] = r.data.ru;
+      console.log('got result: ', res)
+      res.forEach((section) => {
+        if (section.data){
+          allSectionsLabs.value[section.id] = section.data;
+        }
       });
+      console.log('res res: ', res)
     }
   };
 

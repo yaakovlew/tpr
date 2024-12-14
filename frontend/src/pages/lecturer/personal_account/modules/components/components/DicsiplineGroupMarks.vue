@@ -206,6 +206,7 @@ const columns = computed(() => {
     },
   ];
 
+  console.log('tests: ', allTests.value)
   allTests.value?.forEach((test) => {
     columns.push({
       name: test.name,
@@ -214,6 +215,17 @@ const columns = computed(() => {
       align: 'left',
     });
   });
+
+  console.log('labs: ', allLabs.value)
+  allLabs.value?.forEach((lab) => {
+    columns.push({
+      name: lab.name,
+      field: lab.name,
+      label: `Лаб: ${lab.name} (${lab.default_mark})`,
+      align: 'left',
+    });
+  });
+
 
   columns.push({
     name: 'exam',
@@ -262,13 +274,16 @@ const allTests = computed(() => {
 });
 
 const allLabs = computed(() => {
+  console.log('in allLabs')
   const array = Object.values(allSectionsLabs.value)?.map((labs) => labs);
-  const res: ILabaratory.Labaratory[] = [];
+  console.log('in allLabs', array)
+  const res: ILabaratory.ExternalLaboratorySection[] = [];
   array?.forEach((arr) => {
-    if (arr) {
-      res.push(...arr);
+    if (arr?.labs) {
+      res.push(...arr.labs);
     }
   });
+  console.log('in allLabs res', res)
   return res;
 });
 
@@ -287,6 +302,10 @@ const getInfo = async () => {
   await sectionStore.getSections(Number(disciplineId.value));
   if (sections.value) {
     await testsStore.getAllSectionsTests(
+      sections.value?.map((s) => s.section_id)
+    );
+    console.log('sections: ', sections.value?.map((s) => s.section_id))
+    await labsStore.getAllSectionsLabs(
       sections.value?.map((s) => s.section_id)
     );
   }

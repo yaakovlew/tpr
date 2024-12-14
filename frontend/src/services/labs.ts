@@ -39,7 +39,7 @@ export const LabsService = {
       `/laboratory-work/activity?laboratory_id=${data.laboratory_id}&user_id=${data.user_id}`
     )
   ),
-  getSectionLabs: useServiceAction((id: number) =>
-    $apiLecturer.get<ILabaratory.GetLabs>(`/discipline/section/laboratory-work/${id}`)
-  ),
+  // getSectionLabs: useServiceAction((id: number) =>
+  //   $apiLecturer.get<ILabaratory.GetLabs>(`/discipline/section/laboratory-work/${id}`)
+  // ),
 };
