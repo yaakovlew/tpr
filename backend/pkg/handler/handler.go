@@ -3,19 +3,18 @@ package handler
 import (
 	"time"
 
+	_ "backend/docs"
+	"backend/pkg/handler/api_common"
+	"backend/pkg/handler/api_lecturer"
+	"backend/pkg/handler/api_seminarian"
+	"backend/pkg/handler/api_student"
+	"backend/pkg/handler/middleware"
+	"backend/pkg/service"
+
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
-
-	"time"
-
-	_ "backend/docs"
-	"backend/pkg/handler/api_common"
-	"backend/pkg/handler/api_lecturer"
-	"backend/pkg/handler/api_seminarian"end/pkg/handler/api_student"
-	"backend/pkg/handler/middleware"
-	"backend/pkg/service"
 )
 
 type Controller struct {
@@ -41,8 +40,8 @@ func (h *Controller) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{
-			"http://localhost", 
+		AllowOrigins: []string{
+			"http://localhost",
 			"http://127.0.0.1:9000",
 		},
 		AllowMethods:     []string{"PUT", "GET", "POST", "DELETE"},
