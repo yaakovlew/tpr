@@ -144,6 +144,7 @@ func (h *LecturerMarksHandler) GetLaboratoryMarksFromGroup(c *gin.Context) {
 		error_response.NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
 	}
+	println(laboratory)
 	laboratoryId, err := strconv.Atoi(laboratory)
 	if err != nil {
 		err = errors.New("ошибка получения лабораторной")

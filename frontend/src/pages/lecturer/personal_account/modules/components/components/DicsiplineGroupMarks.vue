@@ -158,6 +158,7 @@ const sections = computed(() => sectionStore.sections);
 const students = computed(() => groupStore.groupStudents);
 const examMarks = computed(() => store.examMarks);
 const allTestsMarks = computed(() => store.allTestsMarks);
+const allLabsMarks = computed(() => store.allLabsMarks);
 const discipline = computed(() => disciplineStore.discipline);
 const groups = computed(() => groupStore.groups);
 
@@ -251,11 +252,20 @@ const rows = computed(() => {
       id: student.student_id,
     };
     allTests.value?.forEach((test) => {
+      console.log('test: ', test.test_id, 'marks: ', allTestsMarks.value[test.test_id])
       obj[test.name] =
         allTestsMarks.value[test.test_id]?.find(
           (test) => test.user_id === Number(student.student_id)
         )?.mark ?? null;
     });
+
+    allLabs.value?.forEach((lab) => {
+      obj[lab.name] =
+        allLabsMarks.value[lab.laboratory_id]?.find(
+          (lab) => lab.user_id === Number(student.student_id)
+        )?.mark ?? null;
+    });
+
     rows.push(obj);
   });
 
@@ -294,6 +304,7 @@ const pagination = {
 const getInfo = async () => {
   await groupStore.getGroupStudents(String(groupId.value));
   store.allTestsMarks = {};
+  store.allLabsMarks = {};
   testsStore.allSectionsTests = {};
   await store.getExamMarks({
     group_id: Number(groupId.value),
@@ -311,6 +322,10 @@ const getInfo = async () => {
   }
   await store.getTestsMarks(
     allTests.value.map((t) => t.test_id),
+    Number(groupId.value)
+  );
+  await store.getLabaratoriesMarks(
+    allLabs.value.map((t) => t.laboratory_id),
     Number(groupId.value)
   );
 };

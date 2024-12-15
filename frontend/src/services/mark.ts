@@ -15,7 +15,7 @@ export const MarksService = {
   ),
   getLabaratoryMark: useServiceAction((data: IMark.GetMarkLabaratory) =>
     $apiLecturer.get<IMark.Marks>(
-      `/mark/labaratory?group_id=${data.group_id}&labaratory_id=${data.labaratory_id}`
+      `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.labaratory_id}`
     )
   ),
   postLabaratoryMark: useServiceAction((data: IMark.PostMarkLabaratory) =>
