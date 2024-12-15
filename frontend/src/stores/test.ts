@@ -202,8 +202,6 @@ export const useTestsStore = defineStore('tests', () => {
   };
 
   const getAllSectionsTests = async (id: number[]) => {
-    console.log('in getAllSectionsTests')
-
     const promises: Promise<any>[] = [];
     id.forEach((id) => {
       promises.push(getSectionTests(id));

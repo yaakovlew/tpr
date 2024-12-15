@@ -15,11 +15,13 @@ export const MarksService = {
   ),
   getLabaratoryMark: useServiceAction((data: IMark.GetMarkLabaratory) =>
     $apiLecturer.get<IMark.Marks>(
-      `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.labaratory_id}`
+      `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.laboratory_id}`
     )
   ),
-  postLabaratoryMark: useServiceAction((data: IMark.PostMarkLabaratory) =>
-    $apiLecturer.post('/mark/laboratory', data)
+  postLabaratoryMark: useServiceAction((data: IMark.PostMarkLabaratory) => {
+    console.log('change lab mark: ', data)
+    return $apiLecturer.post('/mark/laboratory', data)
+  }
   ),
   postTestMark: useServiceAction((data: IMark.PostMarkTest) =>
     $apiLecturer.put('/mark/test', data)
@@ -49,7 +51,7 @@ export const MarksService = {
   getLabaratoryMarkSeminarian: useServiceAction(
     (data: IMark.GetMarkLabaratory) =>
       $apiSemianrian.get<IMark.Marks>(
-        `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.labaratory_id}`
+        `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.laboratory_id}`
       )
   ),
 };

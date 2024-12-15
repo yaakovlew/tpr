@@ -29,12 +29,12 @@ export namespace IMark {
 
   export interface GetMarkLabaratory {
     group_id: number;
-    labaratory_id: number;
+    laboratory_id: number;
   }
 
   export interface PostMarkLabaratory {
     mark: number;
-    labaratory_id: number;
+    laboratory_id: number;
     user_id: number;
   }
 

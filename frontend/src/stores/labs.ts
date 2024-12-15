@@ -22,7 +22,6 @@ export const useLabsStore = defineStore('labs', () => {
 
   const getLabsFromSection = async (id: number) => {
     const res = await LabsService.getLabsFromSection(id);
-    console.log('res: ', res)
     if (res.data) {
       sectionLabs.value = res.data.labs;
     }
@@ -50,6 +49,14 @@ export const useLabsStore = defineStore('labs', () => {
     }
   };
 
+  // const getTestReport = async (
+  //     data: ITest.GetTestReport,
+  //     fileName = 'report.txt'
+  //   ) => {
+  //     const res = await TestService.getTestReport(data);
+  //     download(fileName, res.data);
+  // };
+
   const openLab = async (data: ILabaratory.OpenLab) => {
     await LabsService.openLab(data);
   };
@@ -60,7 +67,6 @@ export const useLabsStore = defineStore('labs', () => {
 
   const getSectionLabs = async (id: number) => {
     const res = await LabsService.getLabsFromSection(id);
-    console.log('got res http: ', res.data)
     if (res.data) {
       sectionLabs.value = res.data.labs;
     }
@@ -68,7 +74,6 @@ export const useLabsStore = defineStore('labs', () => {
   };
 
   const getAllSectionsLabs = async (id: number[]) => {
-    console.log('in getAllSectionsLabs')
     const promises: Promise<{data: ILabaratory.GetLabsFromSection | undefined; id: number;}>[] = [];
     id.forEach((id) => {
       promises.push(getSectionLabs(id));
@@ -76,13 +81,11 @@ export const useLabsStore = defineStore('labs', () => {
     const res = await Promise.all(promises);
     allSectionsLabs.value = {};
     if (res) {
-      console.log('got result: ', res)
       res.forEach((section) => {
         if (section.data){
           allSectionsLabs.value[section.id] = section.data;
         }
       });
-      console.log('res res: ', res)
     }
   };
 

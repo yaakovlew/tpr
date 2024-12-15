@@ -32,7 +32,6 @@ export const useMarksStore = defineStore('marks', () => {
       promises.push(getTestMarks({ group_id: groupId, test_id: id }));
     });
     const res = await Promise.all(promises);
-    console.log('marks res: ', res)
     allTestsMarks.value = {};
     res.forEach((r) => {
       allTestsMarks.value[r.id] = r.data.marks;
@@ -41,11 +40,10 @@ export const useMarksStore = defineStore('marks', () => {
 
   const getLabaratoryMarks = async (data: IMark.GetMarkLabaratory) => {
     const res = await MarksService.getLabaratoryMark(data);
-    console.log('sent getLabaratoryMarks: ', data, 'and got result: ', res)
     if (res.data) {
       labaratoryMarks.value = res.data.marks;
     }
-    return { data: res.data, id: data.labaratory_id };
+    return { data: res.data, id: data.laboratory_id };
   };
 
   const getLabaratoriesMarks = async (labIds: number[], groupId: number) => {
@@ -54,17 +52,15 @@ export const useMarksStore = defineStore('marks', () => {
       id: number;
   }>[] = [];
     labIds.forEach((id) => {
-      promises.push(getLabaratoryMarks({ group_id: groupId, labaratory_id: id }));
+      promises.push(getLabaratoryMarks({ group_id: groupId, laboratory_id: id }));
     });
     const res = await Promise.all(promises);
-    console.log('lab marks res: ', res)
     allLabsMarks.value = {};
     res.forEach((labMarks) => {
       if (labMarks?.data?.marks){
         allLabsMarks.value[labMarks.id] = labMarks.data.marks;
       }
     });
-    console.log('allLabsMarks ', Object.values(allLabsMarks.value).map(v => v))
   };
 
   const postLabaratoryMark = async (data: IMark.PostMarkLabaratory) => {

@@ -95,7 +95,7 @@
         >
           <q-td :key="lab.laboratory_id" :props="props">
             {{ props.row[lab.name] ?? 'Не пройдено' }}
-            <q-icon
+            <!-- <q-icon
               v-if="props.row[lab.name] !== null"
               name="download"
               color="primary"
@@ -110,7 +110,7 @@
               "
             >
               <q-tooltip> Скачать отчет </q-tooltip>
-            </q-icon>
+            </q-icon> -->
             <q-popup-edit v-model="props.row[lab.name]" v-slot="scope">
               <q-input
                 v-model="scope.value"
@@ -220,6 +220,15 @@ const changeTestMark = async (userId: number, mark: number, testId: number) => {
   await getInfo();
 };
 
+const changeLabMark = async (userId: number, mark: number, labId: number) => {
+  await store.postLabaratoryMark({
+    user_id: userId,
+    mark: Number(mark),
+    laboratory_id: labId
+  });
+  await getInfo();
+};
+
 const getTestReport = async (testId: number, userId: number, name: string) => {
   const fileName = `Отчет_${currentGroup.value?.name}_${discipline.value?.discipline_name}_${name}.txt`;
   await testsStore.getTestReport(
@@ -230,6 +239,17 @@ const getTestReport = async (testId: number, userId: number, name: string) => {
     fileName
   );
 };
+
+// const getLabReport = async (labId: number, userId: number, name: string) => {
+//   const fileName = `Отчет_${currentGroup.value?.name}_${discipline.value?.discipline_name}_${name}.txt`;
+//   await labsStore.getLabReport(
+//     {
+//       lab_id: labId,
+//       user_id: userId,
+//     },
+//     fileName
+//   );
+// };
 
 const columns = computed(() => {
   const columns: any = [
@@ -247,7 +267,6 @@ const columns = computed(() => {
     },
   ];
 
-  console.log('tests: ', allTests.value)
   allTests.value?.forEach((test) => {
     columns.push({
       name: test.name,
@@ -257,7 +276,6 @@ const columns = computed(() => {
     });
   });
 
-  console.log('labs: ', allLabs.value)
   allLabs.value?.forEach((lab) => {
     columns.push({
       name: lab.name,
@@ -299,7 +317,6 @@ const rows = computed(() => {
     });
 
     allLabs.value?.forEach((lab) => {
-      console.log('lab: ', lab.laboratory_id, 'marks: ', allLabsMarks.value[lab.laboratory_id])
 
       obj[lab.name] =
         allLabsMarks.value[lab.laboratory_id]?.find(
@@ -325,16 +342,13 @@ const allTests = computed(() => {
 });
 
 const allLabs = computed(() => {
-  console.log('in allLabs')
   const array = Object.values(allSectionsLabs.value)?.map((labs) => labs);
-  console.log('in allLabs', array)
   const res: ILabaratory.ExternalLaboratorySection[] = [];
   array?.forEach((arr) => {
     if (arr?.labs) {
       res.push(...arr.labs);
     }
   });
-  console.log('in allLabs res', res)
   return res;
 });
 

@@ -309,7 +309,7 @@ func (h *Controller) InitRoutes() *gin.Engine {
 
 			mark := lecturer.Group("/mark")
 			{
-				mark.PUT("/laboratory", h.LecturerApi.ChangeLaboratoryMark)
+				mark.POST("/laboratory", h.LecturerApi.ChangeLaboratoryMark)
 				mark.PUT("/test", h.LecturerApi.ChangeTestMark)
 				mark.GET("/test", h.LecturerApi.GetTestMarksFromGroup)
 				mark.GET("/laboratory", h.LecturerApi.GetLaboratoryMarksFromGroup)
