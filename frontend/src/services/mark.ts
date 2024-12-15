@@ -19,7 +19,7 @@ export const MarksService = {
     )
   ),
   postLabaratoryMark: useServiceAction((data: IMark.PostMarkLabaratory) =>
-    $apiLecturer.post('/mark/labaratory', data)
+    $apiLecturer.post('/mark/laboratory', data)
   ),
   postTestMark: useServiceAction((data: IMark.PostMarkTest) =>
     $apiLecturer.put('/mark/test', data)
@@ -49,7 +49,7 @@ export const MarksService = {
   getLabaratoryMarkSeminarian: useServiceAction(
     (data: IMark.GetMarkLabaratory) =>
       $apiSemianrian.get<IMark.Marks>(
-        `/mark/labaratory?group_id=${data.group_id}&labaratory_id=${data.labaratory_id}`
+        `/mark/laboratory?group_id=${data.group_id}&laboratory_id=${data.labaratory_id}`
       )
   ),
 };

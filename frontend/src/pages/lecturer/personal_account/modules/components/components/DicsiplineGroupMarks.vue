@@ -55,7 +55,7 @@
           :key="test.test_id"
         >
           <q-td :key="test.test_id" :props="props">
-            {{ props.row[test.name] ?? 'Не пройден' }}
+            {{ props.row[test.name] ?? 'Не пройдено' }}
             <q-icon
               v-if="props.row[test.name] !== null"
               name="download"
@@ -84,8 +84,48 @@
                     scope.set()
                 "
               />
-            </q-popup-edit> </q-td
-        ></template>
+            </q-popup-edit>
+           </q-td>
+        </template>
+
+        <template
+          v-for="lab in allLabs"
+          #[`body-cell-${lab.name}`]="props"
+          :key="lab.laboratory_id"
+        >
+          <q-td :key="lab.laboratory_id" :props="props">
+            {{ props.row[lab.name] ?? 'Не пройдено' }}
+            <q-icon
+              v-if="props.row[lab.name] !== null"
+              name="download"
+              color="primary"
+              size="18px"
+              class="cursor-pointer"
+              @click.stop="
+                getLabReport(
+                  lab.laboratory_id,
+                  props.row.id,
+                  `${props.row.name}_${props.row.surname}`
+                )
+              "
+            >
+              <q-tooltip> Скачать отчет </q-tooltip>
+            </q-icon>
+            <q-popup-edit v-model="props.row[lab.name]" v-slot="scope">
+              <q-input
+                v-model="scope.value"
+                dense
+                autofocus
+                counter
+                type="number"
+                @keyup.enter="
+                  changeLabMark(props.row.id, scope.value, lab.laboratory_id),
+                    scope.set()
+                "
+              />
+            </q-popup-edit>
+           </q-td>
+        </template>
       </q-table>
     </banner-component>
   </div>
@@ -252,7 +292,6 @@ const rows = computed(() => {
       id: student.student_id,
     };
     allTests.value?.forEach((test) => {
-      console.log('test: ', test.test_id, 'marks: ', allTestsMarks.value[test.test_id])
       obj[test.name] =
         allTestsMarks.value[test.test_id]?.find(
           (test) => test.user_id === Number(student.student_id)
@@ -260,6 +299,8 @@ const rows = computed(() => {
     });
 
     allLabs.value?.forEach((lab) => {
+      console.log('lab: ', lab.laboratory_id, 'marks: ', allLabsMarks.value[lab.laboratory_id])
+
       obj[lab.name] =
         allLabsMarks.value[lab.laboratory_id]?.find(
           (lab) => lab.user_id === Number(student.student_id)
@@ -315,7 +356,6 @@ const getInfo = async () => {
     await testsStore.getAllSectionsTests(
       sections.value?.map((s) => s.section_id)
     );
-    console.log('sections: ', sections.value?.map((s) => s.section_id))
     await labsStore.getAllSectionsLabs(
       sections.value?.map((s) => s.section_id)
     );
