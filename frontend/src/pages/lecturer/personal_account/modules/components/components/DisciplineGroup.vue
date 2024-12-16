@@ -8,7 +8,7 @@
         <div>Группа: {{ currentGroupName }}</div>
       </template>
     </banner-component>
-    <banner-component>
+    <!-- <banner-component>
       <template #title> Лекции </template>
       <q-list separator>
         <q-item
@@ -53,9 +53,9 @@
           </div>
         </div>
       </q-dialog>
-    </banner-component>
+    </banner-component> -->
     <banner-component>
-      <template #title> Семинары </template>
+      <template #title> Лабораторные работы </template>
       <q-list separator>
         <q-item
           class="flex g-m items-center justify-between"
