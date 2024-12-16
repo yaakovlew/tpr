@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="seminar-name fixed-width text-primary">
     {{ lesson.lesson_name }}
   </div>
@@ -182,4 +182,4 @@ const deleteSeminar = async () => {
 .fixed-width {
   width: 150px;
 }
-</style>
+</style> -->

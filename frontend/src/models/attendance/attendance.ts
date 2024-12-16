@@ -46,7 +46,7 @@ export namespace IAttendance {
 
   export interface Seminar {
     date: number;
-    seminar_id: string;
+    seminar_id: number;
     name: string;
   }
 

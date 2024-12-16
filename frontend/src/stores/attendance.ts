@@ -122,16 +122,16 @@ export const useAttendanceStore = defineStore('attendance', () => {
     await AttendanceService.deleteSeminar(id);
   };
 
-  const getGroupLessons = async (groupId: number, disciplineId: number) => {
-    const res = await AttendanceService.getGroupLessons({
-      group_id: groupId,
-      discipline_id: disciplineId,
-    });
+  // const getGroupLessons = async (groupId: number, disciplineId: number) => {
+  //   const res = await AttendanceService.getGroupLessons({
+  //     group_id: groupId,
+  //     discipline_id: disciplineId,
+  //   });
 
-    if (res.data) {
-      groupLessons.value = res.data.lessons;
-    }
-  };
+  //   if (res.data) {
+  //     groupLessons.value = res.data.lessons;
+  //   }
+  // };
 
   const addLessonDate = async (data: IAttendance.AddLessonDate) => {
     await AttendanceService.addLessonDate(data);
@@ -348,7 +348,7 @@ export const useAttendanceStore = defineStore('attendance', () => {
     createSeminar,
     changeSeminarName,
     deleteSeminar,
-    getGroupLessons,
+    // getGroupLessons,
     addLessonDate,
     getSeminarVisiting,
     addSeminarVisiting,

@@ -1,4 +1,4 @@
-<template>
+<!-- <template>
   <div class="seminar-name fixed-width text-primary">
     {{ lesson.lesson_name }}
   </div>
@@ -171,7 +171,7 @@ const changeLesson = async () => {
     Number(props.groupId),
     Number(props.lesson.lesson_id)
   );
-  await store.getGroupLessons(props.groupId, props.disciplineId);
+  // await store.getGroupLessons(props.groupId, props.disciplineId);
   editModal.value = false;
 };
 
@@ -181,10 +181,10 @@ const openEditModal = () => {
   editModal.value = true;
 };
 
-const deleteSeminar = async () => {
-  await store.deleteLessonDate(Number(props.lesson.lesson_id), props.groupId);
-  await store.getGroupLessons(props.groupId, props.disciplineId);
-};
+// const deleteSeminar = async () => {
+//   await store.deleteLessonDate(Number(props.lesson.lesson_id), props.groupId);
+//   await store.getGroupLessons(props.groupId, props.disciplineId);
+// };
 </script>
 
 <style lang="scss" scoped>
@@ -202,4 +202,4 @@ const deleteSeminar = async () => {
 .fixed-width {
   width: 150px;
 }
-</style>
+</style> -->

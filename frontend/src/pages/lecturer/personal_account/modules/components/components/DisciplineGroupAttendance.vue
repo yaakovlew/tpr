@@ -12,8 +12,10 @@ import { computed, ref, watch } from 'vue';
 
 const props = defineProps<{
   student: IVisiting.StudentVisiting;
-  seminarId: string;
+  seminarId: number;
 }>();
+
+console.log(props.seminarId)
 
 const store = useAttendanceStore();
 

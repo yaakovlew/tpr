@@ -8,7 +8,7 @@
         <div>Группа: {{ currentGroupName }}</div>
       </template>
     </banner-component>
-    <banner-component>
+    <!-- <banner-component>
       <template #title> Лекции </template>
       <q-list separator>
         <q-item
@@ -53,7 +53,7 @@
           </div>
         </div>
       </q-dialog>
-    </banner-component>
+    </banner-component> -->
     <banner-component>
       <template #title> Семинары </template>
       <q-list separator>
@@ -290,7 +290,7 @@ import BannerComponent from 'src/components/BannerComponent.vue';
 import { ISeminar, ILesson } from 'src/models/attendance/attendance';
 import { useReportStore } from 'src/stores/report';
 import { useGroupsStore } from 'src/stores/groups';
-import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
+// import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
 import { useSectionStore } from 'src/stores/section';
 import { useTestsStore } from 'src/stores/test';
 

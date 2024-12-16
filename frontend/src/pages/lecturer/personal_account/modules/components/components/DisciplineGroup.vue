@@ -70,36 +70,11 @@
         </q-item>
       </q-list>
       <q-btn
-        label="Добавить семинар"
+        label="Добавить лабораторную работу"
         color="primary"
         @click="openAddSeminarModal"
         class="self-end"
       />
-      <q-dialog v-model="addLessonModal" @hide="closeAddLessonModal">
-        <div class="flex column g-m modal">
-          <q-select
-            v-model="lessonName"
-            :options="avaliableToAddLessons"
-            option-label="name"
-            option-value="id"
-          />
-          <div class="flex g-m">
-            <q-date
-              v-model="lessonDate"
-              :mask="mask"
-              color="purple"
-              :locale="myLocale"
-            />
-            <q-time
-              v-model="lessonDate"
-              :mask="mask"
-              color="purple"
-              format24h
-            />
-            <q-btn label="Добавить" @click="addLesson" :disable="!lessonName" />
-          </div>
-        </div>
-      </q-dialog>
       <q-dialog v-model="addSeminarModal" @hide="closeAddSeminarModal">
         <div class="flex column g-m modal">
           <q-input v-model="seminarName" label="Название" />
@@ -354,7 +329,7 @@ import BannerComponent from 'src/components/BannerComponent.vue';
 import { ISeminar, ILesson } from 'src/models/attendance/attendance';
 import { useReportStore } from '../../../../../../stores/report';
 import { useGroupsStore } from 'src/stores/groups';
-import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
+// import DisciplineGroupLesson from './DisciplineGroupLesson.vue';
 import OpenTestTimeModal from './OpenTestTimeModal.vue';
 import OpenLabTimeModal from './OpenLabTimeModal.vue';
 import { useSectionStore } from 'src/stores/section';
@@ -491,10 +466,10 @@ onMounted(async () => {
       Number(disciplineId.value),
       Number(groupId.value)
     );
-    await attendanceStore.getGroupLessons(
-      groupIdNumber.value,
-      disciplineIdNumber.value
-    );
+    // await attendanceStore.getGroupLessons(
+    //   groupIdNumber.value,
+    //   disciplineIdNumber.value
+    // );
   }
 });
 
@@ -539,11 +514,6 @@ const closeAddSeminarModal = () => {
   addSeminarModal.value = false;
 };
 
-const closeAddLessonModal = () => {
-  lessonName.value = null;
-  lessonDate.value = getDate();
-  addLessonModal.value = false;
-};
 
 const closeOpenTestModal = () => {
   openTestModal.value = false;
@@ -561,10 +531,8 @@ const getDate = () => {
   return newDate.toLocaleString('ru');
 };
 
-const seminarName = ref('');
-const lessonName: Ref<ILesson | null> = ref(null);
+const seminarName = ref('Лабораторная работа ');
 const seminarDate = ref(getDate());
-const lessonDate = ref(getDate());
 const testDate = ref(getDate());
 
 const myLocale = {
@@ -585,36 +553,6 @@ const myLocale = {
 
 const mask = 'DD.MM.YYYY, HH:mm:ss';
 
-const addLesson = async () => {
-  const dateParse = new Date();
-  dateParse.setDate(Number(lessonDate.value[0] + lessonDate.value[1]));
-  dateParse.setMonth(Number(lessonDate.value[3] + lessonDate.value[4]) - 1);
-  dateParse.setFullYear(
-    Number(
-      lessonDate.value[6] +
-        lessonDate.value[7] +
-        lessonDate.value[8] +
-        lessonDate.value[9]
-    )
-  );
-  dateParse.setHours(
-    Number(lessonDate.value[12] + lessonDate.value[13]),
-    Number(lessonDate.value[15] + lessonDate.value[16]),
-    Number(lessonDate.value[18] + lessonDate.value[19])
-  );
-  if (lessonName.value?.lesson_id) {
-    await attendanceStore.addLessonDate({
-      group_id: groupIdNumber.value,
-      lesson_id: Number(lessonName.value?.lesson_id),
-      date: Math.floor(dateParse.getTime() / 1000),
-    });
-  }
-  await attendanceStore.getGroupLessons(
-    groupIdNumber.value,
-    disciplineIdNumber.value
-  );
-  closeAddLessonModal();
-};
 
 const createSeminar = async () => {
   const dateParse = new Date();
