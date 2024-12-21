@@ -40,7 +40,7 @@ func (h *Controller) InitRoutes() *gin.Engine {
 	router := gin.New()
 
 	router.Use(cors.New(cors.Config{
-		AllowOrigins:     []string{"https://mephi22.undersite.ru"},
+		AllowOrigins:     []string{"https://mephi22.undersite.ru", "https://mephi71.ru"},
 		AllowMethods:     []string{"PUT", "GET", "POST", "DELETE"},
 		AllowHeaders:     []string{"Origin", "Authorization", "Content-Type"},
 		ExposeHeaders:    []string{"Content-Length"},
