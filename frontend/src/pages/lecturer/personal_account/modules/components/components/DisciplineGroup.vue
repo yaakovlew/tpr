@@ -212,7 +212,7 @@
     transition-show="scale"
     transition-hide="scale"
   >
-    <open-test-time-modal v-model="openTestModal"  />
+    <open-test-time-modal v-model="openTestModal" :selected-test="selectedTest" />
 
     <!-- <div class="test-modal">
       <q-tabs
