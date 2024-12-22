@@ -12,7 +12,7 @@
         />
       </q-list>
     </banner-component>
-    <banner-component
+    <!-- <banner-component
       class="text-primary profile-name"
       @click="addLabDialog = true"
     >
@@ -20,8 +20,8 @@
         Создать лабораторную работу
         <q-icon name="add" size="30px" />
       </div>
-    </banner-component>
-    <q-dialog v-model="addLabDialog">
+    </banner-component> -->
+    <!-- <q-dialog v-model="addLabDialog">
       <div class="create-test flex column justify-between g-m q-pa-md">
         <q-input v-model="addLabForm.name" label="Название" />
         <q-input
@@ -51,7 +51,7 @@
           "
         />
       </div>
-    </q-dialog>
+    </q-dialog> -->
   </div>
 </template>
 
