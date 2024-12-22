@@ -1,16 +1,19 @@
 package api_lecturer_service
 
 import (
-	"backend/pkg/model"
-	"backend/pkg/repository"
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	log "github.com/sirupsen/logrus"
+	"github.com/spf13/viper"
+
+	"backend/pkg/model"
+	"backend/pkg/repository"
 )
 
 type LecturerTestAndLabService struct {
@@ -296,7 +299,9 @@ func (s *LecturerTestAndLabService) OpenLabForStudent(studentId, labId int, date
 	}
 
 	if err := s.sendRequestToOpenLab(lab, studentId, labId, token, true); err != nil {
-		return err
+		// TODO: change it
+		log.Errorf("error open lab for student")
+		//return err
 	}
 
 	return s.repo.OpenLabForStudent(studentId, labId, date)
@@ -316,7 +321,9 @@ func (s *LecturerTestAndLabService) CloseOpenedLabForStudent(studentId, labId in
 		return err
 	}
 	if err := s.sendRequestToOpenLab(lab, studentId, labId, token, false); err != nil {
-		return err
+		// TODO: change it
+		log.Errorf("error close lab for student")
+		//return err
 	}
 
 	return s.repo.CloseOpenedLabForStudent(studentId, labId)
