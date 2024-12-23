@@ -32,4 +32,4 @@ backend/configs/config.yml
 backend/src/test
 
 #frontend
-./frontend/quasar.config.js
+frontend/quasar.config.js
