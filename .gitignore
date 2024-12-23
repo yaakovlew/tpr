@@ -30,3 +30,6 @@ backend/configs/config.yml
 .idea
 .database
 backend/src/test
+
+#frontend
+./frontend/quasar.config.js
