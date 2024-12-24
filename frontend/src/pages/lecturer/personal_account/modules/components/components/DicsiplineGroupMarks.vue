@@ -254,15 +254,15 @@ const getTestReport = async (testId: number, userId: number, name: string) => {
 const columns = computed(() => {
   const columns: any = [
     {
-      name: 'name',
-      field: 'name',
-      label: 'Имя',
-      align: 'left',
-    },
-    {
       name: 'surname',
       field: 'surname',
       label: 'Фамилия',
+      align: 'left',
+    },
+    {
+      name: 'name',
+      field: 'name',
+      label: 'Имя',
       align: 'left',
     },
   ];
