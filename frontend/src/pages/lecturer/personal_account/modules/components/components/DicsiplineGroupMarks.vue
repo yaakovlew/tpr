@@ -24,7 +24,7 @@
     <banner-component class="page-title text-primary">
       Оценки
     </banner-component>
-    <banner-component>
+    <banner-component class='max-full-width'>
       <q-table
         :columns="columns"
         :rows="rows"
@@ -409,4 +409,8 @@ onMounted(async () => {
 });
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.max-full-width{
+  max-width: 100%;
+}
+</style>
