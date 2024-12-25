@@ -343,6 +343,14 @@ const rows = computed(() => {
     rows.push(obj);
   });
 
+  try{
+    rows.sort((a: any, b: any) => {
+    return a.surname.localeCompare(b.surname)
+    })
+  } catch(e){
+    console.log(e)
+  }
+
   return rows;
 });
 
