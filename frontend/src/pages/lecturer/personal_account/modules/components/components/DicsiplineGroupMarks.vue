@@ -293,6 +293,13 @@ const columns = computed(() => {
     align: 'left',
   });
 
+  columns.push({
+    name: 'total',
+    field: 'total',
+    label: 'Итог',
+    align: 'center',
+  });
+
   return columns;
 });
 
@@ -300,29 +307,38 @@ const rows = computed(() => {
   const rows: any = [];
 
   students.value?.forEach((student) => {
+    const examMark = examMarks.value?.find(
+          (mark) => mark.user_id === Number(student.student_id)
+        )?.mark ?? 0
     const obj: Record<string, number | string | null> = {
       name: student.name,
       surname: student.surname,
-      exam:
-        examMarks.value?.find(
-          (mark) => mark.user_id === Number(student.student_id)
-        )?.mark ?? 0,
+      exam: examMark,
       id: student.student_id,
     };
+    let testsSum = 0
     allTests.value?.forEach((test) => {
-      obj[test.name] =
-        allTestsMarks.value[test.test_id]?.find(
+      const mark = allTestsMarks.value[test.test_id]?.find(
           (test) => test.user_id === Number(student.student_id)
         )?.mark ?? null;
+      obj[test.name] = mark
+      if (mark){
+        testsSum += mark
+      }
     });
 
+    let labsSum = 0
     allLabs.value?.forEach((lab) => {
-
-      obj[lab.name] =
-        allLabsMarks.value[lab.laboratory_id]?.find(
+      const mark = allLabsMarks.value[lab.laboratory_id]?.find(
           (lab) => lab.user_id === Number(student.student_id)
         )?.mark ?? null;
+      obj[lab.name] = mark
+        if (mark){
+          labsSum += mark
+        }
     });
+
+    obj.total = labsSum + testsSum + examMark
 
     rows.push(obj);
   });
