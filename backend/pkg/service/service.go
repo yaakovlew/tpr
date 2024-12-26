@@ -130,6 +130,7 @@ type LecturerMarks interface {
 	GetLaboratoryMarksFromGroup(groupId, laboratoryId int) ([]model.GroupLaboratoryMarks, error)
 	GiveExamMark(userId, disciplineId, mark int) error
 	GetAllMarksForExam(groupId, disciplineId int) ([]model.ExamMark, error)
+	GetAttendanceMarksFromGroup(disciplineId, groupID int) ([]model.AttendanceMark, error)
 }
 
 type LecturerAttendance interface {

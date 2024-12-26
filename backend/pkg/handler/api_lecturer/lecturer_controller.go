@@ -1,8 +1,9 @@
 package api_lecturer
 
 import (
-	"backend/pkg/service"
 	"github.com/gin-gonic/gin"
+
+	"backend/pkg/service"
 )
 
 type LecturerPersonalData interface {
@@ -55,6 +56,7 @@ type LecturerMarks interface {
 	GetLaboratoryMarksFromGroup(c *gin.Context)
 	GiveExamMark(c *gin.Context)
 	GetExamMark(c *gin.Context)
+	GetAttendanceMarksFromGroup(c *gin.Context)
 }
 
 type LecturerAttendance interface {

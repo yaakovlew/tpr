@@ -1,10 +1,12 @@
 package api_lecturer_repository
 
 import (
+	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
 	"backend/pkg/model"
 	"backend/pkg/repository/table_name"
-	"fmt"
-	"github.com/jmoiron/sqlx"
 )
 
 type LecturerMarksPostgres struct {
@@ -109,4 +111,117 @@ func (r *LecturerMarksPostgres) MaxExamMark(disciplineId int) int {
 		return 0
 	}
 	return maxMark
+}
+
+func (r *LecturerMarksPostgres) GetAttendanceMarksFromGroup(disciplineId, groupID int) ([]model.AttendanceMark, error) {
+	var marks []model.AttendanceMark
+	query := fmt.Sprintf(`WITH exist_lessons AS (
+    SELECT COUNT(*) AS count 
+    FROM %s 
+    WHERE %s.discipline_id = $1
+),
+exist_seminars AS (
+    SELECT COUNT(*) AS count 
+    FROM %s 
+    JOIN %s ON %s.id = %s.seminar_id
+    WHERE %s.discipline_id = $2 AND %s.group_id = $3
+),
+exist_lesson_table AS (
+    SELECT 
+        %s.id, 
+        %s.name, 
+        %s.surname,
+				lesson_visiting_mark, 
+        COUNT(*) AS exist 
+    FROM %s
+    JOIN %s ON %s.id = %s.user_id
+    JOIN %s ON %s.group_id = %s.group_id
+    JOIN %s ON %s.id = %s.discipline_id
+    JOIN %s ON %s.discipline_id = %s.id
+    JOIN %s ON %s.id = %s.lesson_id
+    WHERE %s.discipline_id = $4 
+      AND %s.group_id = $5 
+      AND %s.is_absent = false
+    GROUP BY %s.id, %s.name, %s.surname, %s.lesson_visiting_mark
+),
+exist_seminar_table AS (
+    SELECT 
+        %s.id, 
+        %s.name, 
+        %s.surname,
+				seminar_visiting_mark, 
+        COUNT(*) AS exist 
+    FROM %s
+    JOIN %s ON %s.id = %s.user_id
+    JOIN %s ON %s.group_id = %s.group_id
+    JOIN %s ON %s.id = %s.discipline_id
+    JOIN %s ON %s.discipline_id = %s.id
+    JOIN %s ON %s.seminar_id = %s.id
+    WHERE %s.discipline_id = $6 
+      AND %s.group_id = $7 
+      AND %s.is_absent = false
+    GROUP BY %s.id, %s.name, %s.surname, %s.seminar_visiting_mark
+)
+SELECT 
+    %s.id AS user_id, 
+    %s.name AS user_name, 
+    %s.surname AS user_surname, 
+    ROUND(
+        CASE 
+					WHEN exist_seminars.count = 0 THEN 0
+					WHEN exist_seminar_table.exist IS NULL THEN 0
+          ELSE exist_seminar_table.seminar_visiting_mark * exist_seminar_table.exist::float / exist_seminars.count
+        END
+    ) AS seminar,
+    ROUND(
+        CASE 
+					WHEN exist_lessons.count = 0 THEN 0
+					WHEN exist_lesson_table.exist IS NULL THEN 0
+          ELSE exist_lesson_table.lesson_visiting_mark * exist_lesson_table.exist::float / exist_lessons.count
+        END
+    ) AS lesson
+FROM %s
+LEFT JOIN exist_seminar_table ON exist_seminar_table.id = %s.id
+LEFT JOIN exist_lesson_table ON exist_lesson_table.id = exist_seminar_table.id
+JOIN %s ON %s.id = %s.user_id
+JOIN %s ON %s.group_id = %s.group_id
+JOIN %s ON %s.id = %s.discipline_id
+CROSS JOIN exist_seminars
+CROSS JOIN exist_lessons
+WHERE %s.discipline_id = $8 AND %s.group_id = $9`,
+		table_name.LessonsTable, table_name.LessonsTable,
+
+		table_name.SeminarsTable, table_name.SeminarVisitingTable, table_name.SeminarsTable,
+		table_name.SeminarVisitingTable, table_name.SeminarsTable, table_name.SeminarsTable,
+
+		table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.UsersTable,
+		table_name.StudentsTable, table_name.UsersTable, table_name.StudentsTable,
+		table_name.CurriculumTable, table_name.StudentsTable, table_name.CurriculumTable,
+		table_name.DisciplinesTable, table_name.DisciplinesTable, table_name.CurriculumTable,
+		table_name.LessonsTable, table_name.LessonsTable, table_name.DisciplinesTable,
+		table_name.LessonVisitingTable, table_name.LessonsTable, table_name.LessonVisitingTable,
+		table_name.CurriculumTable, table_name.CurriculumTable, table_name.LessonVisitingTable,
+		table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.DisciplinesTable,
+
+		table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.UsersTable,
+		table_name.StudentsTable, table_name.UsersTable, table_name.StudentsTable,
+		table_name.CurriculumTable, table_name.StudentsTable, table_name.CurriculumTable,
+		table_name.DisciplinesTable, table_name.DisciplinesTable, table_name.CurriculumTable,
+		table_name.SeminarsTable, table_name.SeminarsTable, table_name.DisciplinesTable,
+		table_name.SeminarVisitingTable, table_name.SeminarVisitingTable, table_name.SeminarsTable,
+		table_name.CurriculumTable, table_name.CurriculumTable, table_name.SeminarVisitingTable,
+		table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.DisciplinesTable,
+
+		table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.UsersTable, table_name.UsersTable,
+		table_name.StudentsTable, table_name.UsersTable, table_name.StudentsTable,
+		table_name.CurriculumTable, table_name.StudentsTable, table_name.CurriculumTable,
+		table_name.DisciplinesTable, table_name.DisciplinesTable, table_name.CurriculumTable,
+		table_name.CurriculumTable, table_name.CurriculumTable,
+	)
+
+	if err := r.db.Select(&marks, query, disciplineId, disciplineId, groupID, disciplineId, groupID, disciplineId, groupID, disciplineId, groupID); err != nil {
+		return nil, err
+	}
+
+	return marks, nil
 }

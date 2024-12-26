@@ -1,13 +1,15 @@
 package repository
 
 import (
+	"database/sql"
+
+	"github.com/jmoiron/sqlx"
+
 	"backend/pkg/model"
 	"backend/pkg/repository/api_common_repository"
 	"backend/pkg/repository/api_lecturer_repository"
 	"backend/pkg/repository/api_seminarian_repository"
 	"backend/pkg/repository/api_student_repository"
-	"database/sql"
-	"github.com/jmoiron/sqlx"
 )
 
 type Authorization interface {
@@ -149,6 +151,7 @@ type LecturerMarks interface {
 	GetAllMarksForExam(groupId, disciplineId int) ([]model.ExamMark, error)
 	CheckExistMark(userId, disciplineId int) error
 	MaxExamMark(disciplineId int) int
+	GetAttendanceMarksFromGroup(disciplineId, groupID int) ([]model.AttendanceMark, error)
 }
 
 type LecturerAttendance interface {

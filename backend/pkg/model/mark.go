@@ -88,6 +88,18 @@ type ExamMarkResponse struct {
 	Marks []ExamMark `json:"marks"`
 }
 
+type AttendanceMark struct {
+	UserId      int    `json:"user_id" db:"user_id"`
+	UserName    string `json:"user_name" db:"user_name"`
+	UserSurname string `json:"user_surname" db:"user_surname"`
+	Lesson      int    `json:"lesson" db:"lesson"`
+	Seminar     int    `json:"seminar" db:"seminar"`
+}
+
+type AttendanceMarkResponse struct {
+	Marks []AttendanceMark `json:"marks"`
+}
+
 type ExamMarkInput struct {
 	UserId       int `json:"user_id" binding:"required"`
 	DisciplineId int `json:"discipline_id" binding:"required"`

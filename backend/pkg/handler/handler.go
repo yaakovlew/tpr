@@ -308,6 +308,7 @@ func (h *Controller) InitRoutes() *gin.Engine {
 				mark.GET("/test", h.LecturerApi.GetTestMarksFromGroup)
 				mark.GET("/laboratory", h.LecturerApi.GetLaboratoryMarksFromGroup)
 				mark.GET("/exam", h.LecturerApi.GetExamMark)
+				mark.GET("/attendance", h.LecturerApi.GetAttendanceMarksFromGroup)
 				mark.POST("/exam", h.LecturerApi.GiveExamMark)
 			}
 

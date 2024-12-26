@@ -1,9 +1,10 @@
 package api_lecturer_service
 
 import (
+	"errors"
+
 	"backend/pkg/model"
 	"backend/pkg/repository"
-	"errors"
 )
 
 type LecturerMarksService struct {
@@ -28,6 +29,10 @@ func (s *LecturerMarksService) GetTestMarksFromGroup(groupId, testId int) ([]mod
 
 func (s *LecturerMarksService) GetLaboratoryMarksFromGroup(groupId, laboratoryId int) ([]model.GroupLaboratoryMarks, error) {
 	return s.repo.GetLaboratoryMarksFromGroup(groupId, laboratoryId)
+}
+
+func (s *LecturerMarksService) GetAttendanceMarksFromGroup(disciplineId, groupID int) ([]model.AttendanceMark, error) {
+	return s.repo.GetAttendanceMarksFromGroup(disciplineId, groupID)
 }
 
 func (s *LecturerMarksService) GiveExamMark(userId, disciplineId, mark int) error {

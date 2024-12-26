@@ -162,6 +162,46 @@ func (h *LecturerMarksHandler) GetLaboratoryMarksFromGroup(c *gin.Context) {
 	})
 }
 
+// GetAttendanceMarksFromGroup @Summary get attendance marks from group
+// @Security ApiKeyAuthLecturer
+// @Tags mark
+// @Description get attendance marks from group
+// @Id get-attendance-marks-from-group
+// @Accept json
+// @Produce json
+// @Param group_id query string true "group_id"
+// @Param discipline_id query string true "discipline_id"
+// @Success 200 {object} model.GroupLaboratoryMarksResponse
+// @Failure 400 {object} error_response.errorWeb
+// @Failure 404 {object} error_response.errorWeb
+// @Failure 500 {object} error_response.errorWeb
+// @Failure default {object} error_response.errorWeb
+// @Router /api/lecturer/mark/attendance  [get]
+func (h *LecturerMarksHandler) GetAttendanceMarksFromGroup(c *gin.Context) {
+	discipline := c.Query("discipline_id")
+	group := c.Query("group_id")
+	disciplineId, err := strconv.Atoi(discipline)
+	if err != nil {
+		err = errors.New("ошибка получения дисциплины")
+		error_response.NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+	groupID, err := strconv.Atoi(group)
+	if err != nil {
+		err = errors.New("ошибка получения группы")
+		error_response.NewErrorResponse(c, http.StatusBadRequest, err.Error())
+		return
+	}
+
+	data, err := h.service.GetAttendanceMarksFromGroup(disciplineId, groupID)
+	if err != nil {
+		err = errors.New("ошибка получения оценок студентов группы за посещение дисциплины")
+		error_response.NewErrorResponse(c, http.StatusInternalServerError, err.Error())
+		return
+	}
+	c.JSON(http.StatusOK, model.AttendanceMarkResponse{Marks: data})
+}
+
 // GiveExamMark @Summary give exam mark
 // @Security ApiKeyAuthLecturer
 // @Tags mark
