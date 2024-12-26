@@ -55,7 +55,7 @@
       </q-dialog>
     </banner-component> -->
     <banner-component>
-      <template #title> Лабораторные работы </template>
+      <template #title> Посещаемость </template>
       <q-list separator>
         <q-item
           class="flex g-m items-center justify-between"
@@ -70,7 +70,7 @@
         </q-item>
       </q-list>
       <q-btn
-        label="Добавить лабораторную работу"
+        label="Добавить посещаемость лабораторной работы"
         color="primary"
         @click="openAddSeminarModal"
         class="self-end"

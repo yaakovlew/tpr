@@ -6,12 +6,14 @@ import (
 	"bufio"
 	"errors"
 	"fmt"
-	"github.com/spf13/viper"
 	"math"
 	"os"
+	"path/filepath"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/spf13/viper"
 )
 
 type StudentTestAndLabService struct {
@@ -144,7 +146,10 @@ func (s *StudentTestAndLabService) checkEqualCount(countAllAnswers int, currentC
 
 func (s *StudentTestAndLabService) MakeReportForTest(userId, testId, currentPoint int, answers []model.QuestionAndAnswerResponse) ([]model.QuestionPercentage, error) {
 	var done []model.QuestionPercentage
-	file, err := os.Create(viper.GetString("test") + "/" + strconv.Itoa(userId) + "-" + strconv.Itoa(testId) + ".txt")
+
+	filePath := viper.GetString("test") + "/" + strconv.Itoa(userId) + "-" + strconv.Itoa(testId) + ".txt"
+	os.MkdirAll(filepath.Dir(filePath), os.ModePerm)
+	file, err := os.Create(filePath)
 	if err != nil {
 		return nil, err
 	}
