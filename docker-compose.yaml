@@ -56,7 +56,7 @@ services:
       - new
     volumes:
       - ./backend/schema:/migrations
-    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@database:5432/mephisrw?sslmode=disable", "up", "3" ]
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@database:5432/mephisrw?sslmode=disable", "up" ]
     links:
       - db
     depends_on:
