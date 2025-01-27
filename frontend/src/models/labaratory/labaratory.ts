@@ -31,6 +31,14 @@ export namespace ILabaratory {
     day_fine: number;
   }
 
+  export interface LabWithClosedDate {
+    laboratory_id: number;
+    name: string;
+    task_description: string;
+    default_mark: number;
+    closed_date: number;
+  }
+
   export interface ExternalLaboratorySection {
     laboratory_id: number;
     external_laboratory_id: number;
@@ -50,6 +58,11 @@ export namespace ILabaratory {
   export interface GetLabs {
     Ru: Labaratory[];
     En: Labaratory[];
+  }
+
+  export interface GetLabsWithClosedDate {
+    ru: LabWithClosedDate[];
+    en: LabWithClosedDate[];
   }
 
   export interface GetLabsFromSection {

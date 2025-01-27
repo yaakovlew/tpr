@@ -7,7 +7,6 @@ export abstract class TokenService {
   }
 
   static set token(token) {
-    console.log('here');
     if (token) localStorage.setItem(this.#key, token);
     else localStorage.removeItem(this.#key);
   }

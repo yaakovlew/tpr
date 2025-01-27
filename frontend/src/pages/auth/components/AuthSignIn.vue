@@ -86,7 +86,6 @@ const onSubmit = async () => {
         router.replace({ name: 'student-profile' });
         break;
       case 'lecturer':
-        console.log('here');
         router.replace({ name: 'lecturer-profile' });
         break;
       case 'seminarian':

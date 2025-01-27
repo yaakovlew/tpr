@@ -1,6 +1,8 @@
 package api_lecturer_service
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -12,6 +14,7 @@ import (
 	log "github.com/sirupsen/logrus"
 	"github.com/spf13/viper"
 
+	"backend/pkg/config"
 	"backend/pkg/model"
 	"backend/pkg/repository"
 )
@@ -293,12 +296,12 @@ func (s *LecturerTestAndLabService) OpenLabForStudent(studentId, labId int, date
 	if err != nil {
 		return err
 	}
-	lab, err := s.GetExternalLabInfo(externalLab)
+	_, err = s.GetExternalLabInfo(externalLab)
 	if err != nil {
 		return err
 	}
-
-	if err := s.sendRequestToOpenLab(lab, studentId, labId, token, true); err != nil {
+	labUrl := config.AppConfig.Lab2AppUrl
+	if err := s.sendRequestToOpenLab(labUrl, studentId, labId, token, true); err != nil {
 		// TODO: change it
 		log.Errorf("error open lab for student")
 		//return err
@@ -316,11 +319,12 @@ func (s *LecturerTestAndLabService) CloseOpenedLabForStudent(studentId, labId in
 	if err != nil {
 		return err
 	}
-	lab, err := s.GetExternalLabInfo(externalLab)
+	_, err = s.GetExternalLabInfo(externalLab)
 	if err != nil {
 		return err
 	}
-	if err := s.sendRequestToOpenLab(lab, studentId, labId, token, false); err != nil {
+	labUrl := config.AppConfig.Lab2AppUrl
+	if err := s.sendRequestToOpenLab(labUrl, studentId, labId, token, false); err != nil {
 		// TODO: change it
 		log.Errorf("error close lab for student")
 		//return err
@@ -337,25 +341,40 @@ func (s *LecturerTestAndLabService) GetLabMarkForStudent(studentId, labId int) (
 	return s.repo.GetLabMarkForStudent(studentId, labId)
 }
 
-func (s *LecturerTestAndLabService) sendRequestToOpenLab(lab model.LaboratoryWorkResponse, userId, labId int, token string, isOpen bool) error {
-	url := fmt.Sprintf("%s/%s?user_id=%d&is_open=%t&lab_id=%d", lab.Link, "open", userId, isOpen, labId)
-	method := "POST"
+func (s *LecturerTestAndLabService) sendRequestToOpenLab(labBaseUrl string, userId, labId int, token string, isOpen bool) error {
+	// Define the URL without query parameters
+	url := fmt.Sprintf("%s/%s", labBaseUrl, "open")
+	method := "PATCH"
 
-	client := &http.Client{}
-	req, err := http.NewRequest(method, url, nil)
-
+	// Create a JSON body with the parameters
+	body := map[string]interface{}{
+		"user_id": userId,
+		"is_open": isOpen,
+		"lab_id":  labId,
+	}
+	jsonBody, err := json.Marshal(body)
 	if err != nil {
 		return err
 	}
+
+	// Create the HTTP request
+	client := &http.Client{}
+	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonBody))
+	if err != nil {
+		return err
+	}
+	req.Header.Add("Content-Type", "application/json")
 	req.Header.Add("lab-token", token)
 	req.Header.Add("lecturer-token", os.Getenv("LECTURER_HEADER"))
 
+	// Send the request
 	res, err := client.Do(req)
 	if err != nil {
 		return err
 	}
 	defer res.Body.Close()
 
+	// Read the response body to handle errors or confirm success
 	if _, err := ioutil.ReadAll(res.Body); err != nil {
 		return err
 	}

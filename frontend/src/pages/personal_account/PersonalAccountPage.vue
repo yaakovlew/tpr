@@ -11,6 +11,7 @@
       <!-- <q-tab name="results" label="Результаты тестирования" /> -->
       <q-tab name="disciplins" label="Дисциплины" />
       <q-tab name="tests" label="Тесты" />
+      <q-tab name="labs" label="Лабораторные работы" />
     </q-tabs>
     <q-tab-panels v-model="tab" class="bg-none q-pa-none flex-grow">
       <q-tab-panel name="profile" class="q-py-none">
@@ -25,6 +26,9 @@
       <q-tab-panel name="tests" class="q-py-none">
         <personal-tests />
       </q-tab-panel>
+      <q-tab-panel name="labs" class="q-py-none">
+        <personal-labs />
+      </q-tab-panel>
     </q-tab-panels>
   </div>
 </template>
@@ -35,6 +39,7 @@ import PersonalInfo from './modules/PersonalInfo.vue';
 import PersonalVisiting from './modules/PersonalVisiting.vue';
 import PersonalDisciplines from './modules/PersonalDisciplines.vue';
 import PersonalTests from './modules/PersonalTests.vue';
+import PersonalLabs from './modules/PersonalLabs.vue';
 import { useAuthStore } from 'src/stores/auth';
 import { useRouter } from 'vue-router';
 import { useTestsStore } from '../../stores/test';

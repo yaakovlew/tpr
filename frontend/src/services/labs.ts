@@ -1,4 +1,4 @@
-import { $apiLecturer, $apiSemianrian } from 'src/boot/axios';
+import { $apiLecturer, $apiSemianrian, $apiStudent } from 'src/boot/axios';
 import { ILabaratory } from 'src/models/labaratory/labaratory';
 import { useServiceAction } from 'src/utils/service/action';
 
@@ -38,6 +38,13 @@ export const LabsService = {
     $apiLecturer.delete(
       `/laboratory-work/activity?laboratory_id=${data.laboratory_id}&user_id=${data.user_id}`
     )
+  ),
+  getOpenedLabs: useServiceAction(() =>
+    $apiStudent.get<ILabaratory.GetLabsWithClosedDate>('/laboratory-work?is_done=0')
+  ),
+
+  getDoneLabsStudent: useServiceAction(() =>
+    $apiStudent.get<ILabaratory.GetLabsWithClosedDate>('/laboratory-work?is_done=1')
   ),
   // getSectionLabs: useServiceAction((id: number) =>
   //   $apiLecturer.get<ILabaratory.GetLabs>(`/discipline/section/laboratory-work/${id}`)

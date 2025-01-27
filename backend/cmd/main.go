@@ -7,6 +7,7 @@ import (
 	"syscall"
 
 	"backend"
+	"backend/pkg/config"
 	"backend/pkg/handler"
 	"backend/pkg/integrations"
 	"backend/pkg/repository"
@@ -15,7 +16,6 @@ import (
 	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
-	"github.com/spf13/viper"
 )
 
 // @title backend
@@ -42,9 +42,8 @@ import (
 // @name AuthorizationCommon
 func main() {
 	logrus.SetFormatter(new(logrus.JSONFormatter))
-	if err := initConfig(); err != nil {
-		logrus.Fatalf("error intializing config: %s", err.Error())
-		return
+	if err := config.InitConfig(); err != nil {
+		logrus.Fatalf("Failed to load configuration: %v", err)
 	}
 
 	if err := godotenv.Load(); err != nil {
@@ -52,12 +51,12 @@ func main() {
 		return
 	}
 	db, err := repository.NewPostgresDB(repository.Config{
-		Host:     viper.GetString("db.host"),
-		Port:     viper.GetString("db.port"),
-		Username: viper.GetString("db.username"),
+		Host:     config.AppConfig.DB.Host,
+		Port:     config.AppConfig.DB.Port,
+		Username: config.AppConfig.DB.Username,
 		Password: os.Getenv("DB_PASSWORD"),
-		DBName:   viper.GetString("db.dbname"),
-		SSLMode:  viper.GetString("db.sslmode"),
+		DBName:   config.AppConfig.DB.DBName,
+		SSLMode:  config.AppConfig.DB.SSLMode,
 	})
 	if err != nil {
 		logrus.Fatalf("Fatal to connect to DB, because: %s", err.Error())
@@ -92,10 +91,4 @@ func main() {
 		logrus.Errorf("error occured on db connection close: %s", err.Error())
 		return
 	}
-}
-
-func initConfig() error {
-	viper.AddConfigPath("configs")
-	viper.SetConfigName("config")
-	return viper.ReadInConfig()
 }

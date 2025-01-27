@@ -8,6 +8,8 @@ export const useLabsStore = defineStore('labs', () => {
   const sectionLabs = ref<ILabaratory.ExternalLaboratorySection[] | null>(null);
   const studentsOpenedLab = ref<ILabaratory.StudentOpenLab[]>([]);
   const allSectionsLabs = ref<Record<number, ILabaratory.GetLabsFromSection>>({});
+  const openedLabsStudent = ref<ILabaratory.LabWithClosedDate[]>([]);
+  const studentsDoneLabs = ref<ILabaratory.LabWithClosedDate[]>([]);
 
   const addLab = async (lab: ILabaratory.AddLabaratory) => {
     await LabsService.addLabaratory(lab);
@@ -49,6 +51,14 @@ export const useLabsStore = defineStore('labs', () => {
     }
   };
 
+  const getOpenedLabs = async () => {
+    const res = await LabsService.getOpenedLabs();
+    if (res.data) {
+      openedLabsStudent.value = res.data.ru;
+    }
+  };
+
+
   // const getTestReport = async (
   //     data: ITest.GetTestReport,
   //     fileName = 'report.txt'
@@ -71,6 +81,15 @@ export const useLabsStore = defineStore('labs', () => {
       sectionLabs.value = res.data.labs;
     }
     return { data: res.data, id };
+  };
+
+  const getDoneLabsStudent = async () => {
+    const res = await LabsService.getDoneLabsStudent();
+    console.log('res', res)
+    if (res.data) {
+      studentsDoneLabs.value = res.data.ru;
+      console.log('studentsDoneLabs.value', studentsDoneLabs.value, res.data.ru)
+    }
   };
 
   const getAllSectionsLabs = async (id: number[]) => {
@@ -103,8 +122,12 @@ export const useLabsStore = defineStore('labs', () => {
     getStudentsOpenLabs,
     studentsOpenedLab,
     openLab,
+    getOpenedLabs,
+    openedLabsStudent,
+    getDoneLabsStudent,
     closeLab,
     getAllSectionsLabs,
     allSectionsLabs,
+    studentsDoneLabs
   };
 });
