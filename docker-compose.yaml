@@ -10,7 +10,7 @@ services:
     build:
       context: ./frontend
     ports:
-      - '8080:80'
+      - '9000:80'
     depends_on:
       - backend
 
@@ -33,9 +33,7 @@ services:
     image: postgres:latest
     restart: always
     networks:
-      new:
-        aliases:
-          - database
+      - new
     environment:
       - POSTGRES_PASSWORD=postgres
       - POSTGRES_USER=postgres
@@ -56,12 +54,61 @@ services:
       - new
     volumes:
       - ./backend/schema:/migrations
-    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@database:5432/mephisrw?sslmode=disable", "up" ]
-    links:
-      - db
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@db:5432/mephisrw?sslmode=disable", "up" ]
     depends_on:
       db:
         condition: service_healthy
+
+  labs_db:
+    image: postgres:latest
+    restart: always
+    networks:
+      - new
+    environment:
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - POSTGRES_DB=labs
+    ports:
+      - 5434:5432
+    volumes:
+      - ./../labs/.database/postgres/data:/var/lib/postgresql/data
+    healthcheck:
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
+      interval: 3s
+      timeout: 3s
+      retries: 5
+
+  migrate_labs:
+    image: migrate/migrate
+    networks:
+      - new
+    volumes:
+      - ./../labs/lab_2_backend/backend/migrations:/migrations
+    command: [ "-path", "/migrations", "-database",  "postgres://postgres:postgres@labs_db:5432/labs?sslmode=disable", "up" ]
+    depends_on:
+      labs_db:
+        condition: service_healthy
+
+  lab_2_backend:
+    networks:
+      - new
+    restart: always
+    build:
+      context: ./../labs/lab_2_backend/backend
+    ports:
+      - '8002:8002'
+    depends_on:
+      - migrate_labs
+
+  lab_2_frontend:
+    networks:
+      - new
+    build:
+      context: ./../labs/lab_2_frontend/frontend
+    ports:
+      - '9002:80'
+    depends_on:
+      - lab_2_backend
 
 volumes:
   db-data: { }
