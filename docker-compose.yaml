@@ -9,6 +9,8 @@ services:
       - new
     build:
       context: ./frontend
+      args:
+        BASE_URL: 'http://localhost:8000'
     ports:
       - '9000:80'
     depends_on:
@@ -26,6 +28,7 @@ services:
       - ./materials:/materials
     environment:
       - DB_PASSWORD=postgres
+      - DB_HOST=db
     depends_on:
       - migrate
 
@@ -95,6 +98,8 @@ services:
     restart: always
     build:
       context: ./../labs/lab_2_backend/backend
+    environment:
+      - DB_HOST=labs_db
     ports:
       - '8002:8002'
     depends_on:

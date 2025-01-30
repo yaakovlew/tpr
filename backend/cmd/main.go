@@ -13,7 +13,6 @@ import (
 	"backend/pkg/repository"
 	"backend/pkg/service"
 
-	"github.com/joho/godotenv"
 	_ "github.com/lib/pq"
 	"github.com/sirupsen/logrus"
 )
@@ -46,21 +45,16 @@ func main() {
 		logrus.Fatalf("Failed to load configuration: %v", err)
 	}
 
-	if err := godotenv.Load(); err != nil {
-		logrus.Fatalf("error loading env varibles: %s", err.Error())
-		return
-	}
 	db, err := repository.NewPostgresDB(repository.Config{
 		Host:     config.AppConfig.DB.Host,
 		Port:     config.AppConfig.DB.Port,
 		Username: config.AppConfig.DB.Username,
-		Password: os.Getenv("DB_PASSWORD"),
+		Password: config.AppConfig.DB.Password,
 		DBName:   config.AppConfig.DB.DBName,
 		SSLMode:  config.AppConfig.DB.SSLMode,
 	})
 	if err != nil {
 		logrus.Fatalf("Fatal to connect to DB, because: %s", err.Error())
-		return
 	}
 	repos := repository.NewRepository(db)
 	services := service.NewService(repos)

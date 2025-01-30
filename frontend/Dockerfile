@@ -5,6 +5,10 @@ WORKDIR /app
 
 COPY . .
 
+# Set BASE_URL during build
+ARG BASE_URL
+ENV BASE_URL=${BASE_URL}
+
 RUN npm install && npm run build
 
 
