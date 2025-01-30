@@ -100,6 +100,7 @@ services:
       context: ./../labs/lab_2_backend/backend
     environment:
       - DB_HOST=labs_db
+      - DB_PORT=5432
     ports:
       - '8002:8002'
     depends_on:

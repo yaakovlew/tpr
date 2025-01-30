@@ -23,6 +23,7 @@ type LabWithClosedDate struct {
 	TaskDescription string `json:"task_description" db:"task_description"`
 	DefaultMark     int    `json:"default_mark" db:"default_mark"`
 	ClosedDate      int    `json:"closed_date" db:"closed_date"`
+	Link            string `json:"link" db:"link"`
 }
 
 type TestAdd struct {

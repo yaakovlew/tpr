@@ -5,10 +5,11 @@ import (
 	"backend/pkg/repository/table_name"
 	"errors"
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"math/rand"
 	"strconv"
 	"time"
+
+	"github.com/jmoiron/sqlx"
 )
 
 type StudentTestAndLabPostgres struct {
@@ -524,7 +525,7 @@ func (r *StudentTestAndLabPostgres) GetAllDoneTests(userId int, timeNow int64) (
 
 func (r *StudentTestAndLabPostgres) GetAllDoneLabs(userId int, timeNow int64) ([]model.LabWithClosedDate, []model.LabWithClosedDate, error) {
 	var labs []model.LabWithClosedDate
-	query := fmt.Sprintf(`SELECT %s.id, %s.name, %s.task_description, %s.default_mark, closed_date 
+	query := fmt.Sprintf(`SELECT %s.id, %s.name, %s.task_description, %s.default_mark, closed_date, %s.link 
 			FROM %s 
 			INNER JOIN %s 
 			ON %s.external_laboratory_id = %s.id
@@ -533,7 +534,7 @@ func (r *StudentTestAndLabPostgres) GetAllDoneLabs(userId int, timeNow int64) ([
 			WHERE %s.user_id = $1 AND (is_done = true OR (closed_date < $2 AND closed_date != 0))
 			ORDER BY %s.id`,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
-		table_name.LaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
+		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryDateTable,
 		table_name.LaboratoryTable, table_name.LaboratoryDateTable, table_name.LaboratoryDateTable, table_name.LaboratoryTable)
 	err := r.db.Select(&labs, query, userId, timeNow)
@@ -541,7 +542,7 @@ func (r *StudentTestAndLabPostgres) GetAllDoneLabs(userId int, timeNow int64) ([
 		return nil, nil, err
 	}
 	var labsEn []model.LabWithClosedDate
-	query = fmt.Sprintf(`SELECT %s.id, %s.name_en as name, %s.task_description_en as task_description, %s.default_mark, closed_date 
+	query = fmt.Sprintf(`SELECT %s.id, %s.name_en as name, %s.task_description_en as task_description, %s.default_mark, closed_date, %s.link
 			FROM %s 
 			INNER JOIN %s 
 			ON %s.external_laboratory_id = %s.id
@@ -550,7 +551,7 @@ func (r *StudentTestAndLabPostgres) GetAllDoneLabs(userId int, timeNow int64) ([
 			WHERE %s.user_id = $1 AND (is_done = true OR (closed_date < $2 AND closed_date != 0))
 			ORDER BY %s.id`,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
-		table_name.LaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
+		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryDateTable,
 		table_name.LaboratoryTable, table_name.LaboratoryDateTable, table_name.LaboratoryDateTable, table_name.LaboratoryTable)
 	err = r.db.Select(&labsEn, query, userId, timeNow)
@@ -562,7 +563,7 @@ func (r *StudentTestAndLabPostgres) GetAllDoneLabs(userId int, timeNow int64) ([
 
 func (r *StudentTestAndLabPostgres) GetAllOpenedLabs(userId int, timeNow int64) ([]model.LabWithClosedDate, []model.LabWithClosedDate, error) {
 	var tests []model.LabWithClosedDate
-	query := fmt.Sprintf(`SELECT %s.id, %s.name, %s.task_description, default_mark, closed_date
+	query := fmt.Sprintf(`SELECT %s.id, %s.name, %s.task_description, default_mark, closed_date, %s.link
 								FROM %s
 								INNER JOIN %s
 								ON %s.external_laboratory_id = %s.id
@@ -571,14 +572,14 @@ func (r *StudentTestAndLabPostgres) GetAllOpenedLabs(userId int, timeNow int64) 
 								WHERE 
 								user_id = $1 AND (is_done = false AND (closed_date > $2 OR closed_date = 0))
 								ORDER BY %s.id`,
-		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
+		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryDateTable, table_name.LaboratoryTable, table_name.LaboratoryDateTable, table_name.LaboratoryTable)
 	if err := r.db.Select(&tests, query, userId, timeNow); err != nil {
 		return nil, nil, err
 	}
 	var testsEn []model.LabWithClosedDate
-	query = fmt.Sprintf(`SELECT %s.id, %s.name_en as name, %s.task_description_en as task_description, default_mark, closed_date
+	query = fmt.Sprintf(`SELECT %s.id, %s.name_en as name, %s.task_description_en as task_description, default_mark, closed_date, %s.link
 								FROM %s
 								INNER JOIN %s
 								ON %s.external_laboratory_id = %s.id
@@ -587,7 +588,7 @@ func (r *StudentTestAndLabPostgres) GetAllOpenedLabs(userId int, timeNow int64) 
 								WHERE 
 								user_id = $1 AND (is_done = false AND (closed_date > $2 OR closed_date = 0))
 								ORDER BY %s.id`,
-		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
+		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryTable, table_name.ExternalLaboratoryTable, table_name.LaboratoryTable, table_name.ExternalLaboratoryTable,
 		table_name.LaboratoryDateTable, table_name.LaboratoryTable, table_name.LaboratoryDateTable, table_name.LaboratoryTable)
 	if err := r.db.Select(&testsEn, query, userId, timeNow); err != nil {

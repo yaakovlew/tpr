@@ -21,11 +21,12 @@
               label="Открыть"
               color="primary"
               @click="
-                openLab(
-                  props.row.laboratory_id,
-                  props.row.closed_date,
-                  props.row.minutes_duration
-                )
+                openLab(props.row.link)
+                // openLab(
+                //   props.row.laboratory_id,
+                //   props.row.closed_date,
+                //   props.row.minutes_duration
+                // )
               "
             />
           </q-td>
@@ -86,7 +87,18 @@ const testsMarkStudent = computed(() => marksStore.testsMarkStudent);
 
 const router = useRouter();
 
-const openLab = async (id: number, closeDate: number, duration: number) => {
+const openLab = async (link: string) => {
+  link = `${link}?jwt=${localStorage.getItem('token')}`
+  if (link.startsWith('http') || link.startsWith('//')) {
+    // Open external link in a new tab
+    window.open(link, '_blank');
+  } else {
+    // Navigate within the app
+    router.push(link);
+  }
+
+
+
   // await currentTestStore.setCurrentTest(id);
   // currentTestStore.setCloseDate(closeDate);
   // currentTestStore.setTestDuration(duration);

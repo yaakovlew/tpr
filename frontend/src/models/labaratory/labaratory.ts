@@ -37,6 +37,7 @@ export namespace ILabaratory {
     task_description: string;
     default_mark: number;
     closed_date: number;
+    link: string
   }
 
   export interface ExternalLaboratorySection {

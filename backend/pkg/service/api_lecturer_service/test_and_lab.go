@@ -290,14 +290,17 @@ func (s *LecturerTestAndLabService) GetUsersWithDoneLaboratory(labId int) ([]mod
 func (s *LecturerTestAndLabService) OpenLabForStudent(studentId, labId int, date int64) error {
 	externalLab, err := s.repo.GetLabInfo(labId)
 	if err != nil {
+		log.Errorf("error0 %s, %d", err, labId)
 		return err
 	}
 	token, err := s.repo.GetLabToken(externalLab)
 	if err != nil {
+		log.Errorf("error1 %s, %d", err, labId)
 		return err
 	}
 	_, err = s.GetExternalLabInfo(externalLab)
 	if err != nil {
+		log.Errorf("error2 %s, %d", err, labId)
 		return err
 	}
 	labUrl, err := s.repo.GetExternalLabBackendURL(externalLab)
