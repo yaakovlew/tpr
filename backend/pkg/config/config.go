@@ -8,12 +8,12 @@ import (
 )
 
 type Config struct {
-	Host        string
-	Port        string
-	Destination string
-	Test        string
-	Lab2AppUrl  string
-	DB          DBConfig
+	Host           string
+	Port           string
+	Destination    string
+	Test           string
+	Lab2BackendUrl string
+	DB             DBConfig
 }
 
 type DBConfig struct {
@@ -36,11 +36,11 @@ func InitConfig() error {
 
 	// Load config from env variables
 	AppConfig = Config{
-		Host:        getEnv("APP_HOST", "localhost"),
-		Port:        getEnv("APP_PORT", "8000"),
-		Destination: getEnv("DESTINATION", "./materials/"),
-		Test:        getEnv("TEST_PATH", "./src/test"),
-		Lab2AppUrl:  getEnv("LAB2_APP_URL", "http://localhost:8002/lab2"),
+		Host:           getEnv("APP_HOST", "localhost"),
+		Port:           getEnv("APP_PORT", "8000"),
+		Destination:    getEnv("DESTINATION", "./materials/"),
+		Test:           getEnv("TEST_PATH", "./src/test"),
+		Lab2BackendUrl: getEnv("LAB2_BACKEND_URL", "http://localhost:8002/lab2"),
 		DB: DBConfig{
 			Host:     getEnv("DB_HOST", "localhost"),
 			SSLMode:  getEnv("DB_SSLMODE", "disable"),

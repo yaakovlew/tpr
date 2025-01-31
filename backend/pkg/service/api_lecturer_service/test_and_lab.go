@@ -314,7 +314,7 @@ func (s *LecturerTestAndLabService) OpenLabForStudent(studentId, labId int, date
 
 	if err := s.sendRequestToOpenLab(labUrl, studentId, labId, token, true); err != nil {
 		// TODO: change it
-		log.Errorf("error open lab for student")
+		log.Errorf("error open lab for student: %s, %d, %d, %s, %s", labUrl, studentId, labId, token, err.Error())
 		//return err
 	}
 
@@ -334,7 +334,7 @@ func (s *LecturerTestAndLabService) CloseOpenedLabForStudent(studentId, labId in
 	if err != nil {
 		return err
 	}
-	labUrl := config.AppConfig.Lab2AppUrl
+	labUrl := config.AppConfig.Lab2BackendUrl
 	if err := s.sendRequestToOpenLab(labUrl, studentId, labId, token, false); err != nil {
 		// TODO: change it
 		log.Errorf("error close lab for student")
