@@ -1,10 +1,12 @@
 package api_lecturer_repository
 
 import (
+	"fmt"
+
+	"github.com/jmoiron/sqlx"
+
 	"backend/pkg/model"
 	"backend/pkg/repository/table_name"
-	"fmt"
-	"github.com/jmoiron/sqlx"
 )
 
 type LecturerTestAndLabPostgres struct {
@@ -652,6 +654,16 @@ func (r *LecturerTestAndLabPostgres) GetExternalLabInfo(labId int) (model.Labora
 	var lab model.LaboratoryWorkResponse
 	if err := r.db.Get(&lab, query, labId); err != nil {
 		return model.LaboratoryWorkResponse{}, err
+	}
+
+	return lab, nil
+}
+
+func (r *LecturerTestAndLabPostgres) GetExternalLabBackendURL(labId int) (string, error) {
+	query := fmt.Sprintf("SELECT backend_url FROM %s WHERE id = $1", table_name.ExternalLaboratoryTable)
+	var lab string
+	if err := r.db.Get(&lab, query, labId); err != nil {
+		return "", err
 	}
 
 	return lab, nil

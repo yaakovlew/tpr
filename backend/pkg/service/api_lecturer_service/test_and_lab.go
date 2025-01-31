@@ -300,7 +300,15 @@ func (s *LecturerTestAndLabService) OpenLabForStudent(studentId, labId int, date
 	if err != nil {
 		return err
 	}
-	labUrl := config.AppConfig.Lab2AppUrl
+	labUrl, err := s.repo.GetExternalLabBackendURL(externalLab)
+	if err != nil {
+		return err
+	}
+
+	if labUrl == "" {
+		return fmt.Errorf("invalid laboratory backend url")
+	}
+
 	if err := s.sendRequestToOpenLab(labUrl, studentId, labId, token, true); err != nil {
 		// TODO: change it
 		log.Errorf("error open lab for student")

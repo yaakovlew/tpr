@@ -246,6 +246,7 @@ type LecturerTestAndLab interface {
 	ChangeLabMarkForStudent(studentId, labId, mark int) error
 	GetLabMarkForStudent(studentId, labId int) (int, error)
 	GetExternalLabInfo(labId int) (model.LaboratoryWorkResponse, error)
+	GetExternalLabBackendURL(labId int) (string, error)
 }
 
 type LecturerSection interface {
