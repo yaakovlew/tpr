@@ -33,3 +33,5 @@ backend/src/test
 
 #frontend
 frontend/quasar.config.js
+backend/.vscode/settings.json
+backend/cmd/configs/config.yml
