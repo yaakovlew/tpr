@@ -355,7 +355,7 @@ func (s *LecturerTestAndLabService) GetLabMarkForStudent(studentId, labId int) (
 func (s *LecturerTestAndLabService) sendRequestToOpenLab(labBaseUrl string, userId, labId int, token string, isOpen bool) error {
 	// Define the URL without query parameters
 	url := fmt.Sprintf("%s/%s", labBaseUrl, "open")
-	method := "PATCH"
+	method := "POST"
 
 	// Create a JSON body with the parameters
 	body := map[string]interface{}{
