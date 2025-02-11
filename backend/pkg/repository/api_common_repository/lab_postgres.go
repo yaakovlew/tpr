@@ -1,10 +1,12 @@
 package api_common_repository
 
 import (
-	"backend/pkg/repository/table_name"
 	"fmt"
-	"github.com/jmoiron/sqlx"
 	"time"
+
+	"github.com/jmoiron/sqlx"
+
+	"backend/pkg/repository/table_name"
 )
 
 type CommonLabPostgres struct {
@@ -64,10 +66,9 @@ func (r *CommonLabPostgres) ChangeLabMark(studentId, laboratoryId, percentage in
 
 func (r *CommonLabPostgres) GiveAccessForLab(userId, labId int) (bool, error) {
 	var isDone bool
-	currentTime := time.Now().Unix()
-	query := fmt.Sprintf("SELECT is_done FROM %s WHERE user_id = $1 AND laboratory_id = $2 AND closed_date + 6000 > $3", table_name.LaboratoryDateTable)
+	query := fmt.Sprintf("SELECT is_done FROM %s WHERE user_id = $1 AND laboratory_id = $2", table_name.LaboratoryDateTable)
 	errAccess := fmt.Errorf("access to lab denied")
-	row := r.db.QueryRow(query, userId, labId, currentTime)
+	row := r.db.QueryRow(query, userId, labId)
 	if err := row.Scan(&isDone); err != nil {
 		return false, errAccess
 	}
