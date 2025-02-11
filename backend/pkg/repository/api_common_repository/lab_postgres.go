@@ -68,10 +68,10 @@ func (r *CommonLabPostgres) GiveAccessForLab(userId, labId int) (bool, error) {
 	var isDone bool
 	query := fmt.Sprintf("SELECT is_done FROM %s WHERE user_id = $1 AND laboratory_id = $2", table_name.LaboratoryDateTable)
 	errAccess := fmt.Errorf("access to lab denied")
-	row := r.db.QueryRow(query, userId, labId)
-	if err := row.Scan(&isDone); err != nil {
-		return false, errAccess
+	if err := r.db.Get(&isDone, query, userId, labId); err != nil {
+		return false, err
 	}
+
 	if isDone {
 		return false, errAccess
 	} else {

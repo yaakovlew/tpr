@@ -1,6 +1,8 @@
 package api_common_service
 
 import (
+	log "github.com/sirupsen/logrus"
+
 	"backend/pkg/repository"
 )
 
@@ -13,6 +15,7 @@ func NewCommonLabService(repository repository.CommonLab) *CommonLabService {
 }
 
 func (s *CommonLabService) ChangeLabDateAndMark(studentId, laboratoryId, percentage int) error {
+	log.Infof("user_id: %d lab_id: %d percentage: %d", studentId, laboratoryId, percentage)
 	if _, err := s.repo.GiveAccessForLab(studentId, laboratoryId); err != nil {
 		return err
 	}
