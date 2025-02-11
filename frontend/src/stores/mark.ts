@@ -10,6 +10,7 @@ export const useMarksStore = defineStore('marks', () => {
   const allTestsMarks: Ref<Record<number, IMark.Mark[]>> = ref({});
   const testsMarkStudent: Ref<IMark.TestMark[]> = ref([]);
   const allLabsMarks: Ref<Record<number, IMark.Mark[]>> = ref({});
+  const labsMarkStudent: Ref<IMark.TestMark[]> = ref([]);
 
   const getExamMarks = async (data: IMark.GetMarkExam) => {
     const res = await MarksService.getExamMark(data);
@@ -140,5 +141,6 @@ export const useMarksStore = defineStore('marks', () => {
     postExamMarkSeminarian,
     getLabaratoriesMarks,
     allLabsMarks,
+    labsMarkStudent,
   };
 });
