@@ -1,8 +1,6 @@
 package api_lecturer_service
 
 import (
-	"bytes"
-	"encoding/json"
 	"errors"
 	"fmt"
 	"io/ioutil"
@@ -354,23 +352,17 @@ func (s *LecturerTestAndLabService) GetLabMarkForStudent(studentId, labId int) (
 
 func (s *LecturerTestAndLabService) sendRequestToOpenLab(labBaseUrl string, userId, labId int, token string, isOpen bool) error {
 	// Define the URL without query parameters
-	url := fmt.Sprintf("%s/%s", labBaseUrl, "open")
+	url := fmt.Sprintf("%s/%s?user_id=%d&lab_id=%d", labBaseUrl, "open", userId, labId)
+	if isOpen {
+		url += "is_open=true"
+	} else {
+		url += "is_open=false"
+	}
 	method := "POST"
-
-	// Create a JSON body with the parameters
-	body := map[string]interface{}{
-		"user_id": userId,
-		"is_open": isOpen,
-		"lab_id":  labId,
-	}
-	jsonBody, err := json.Marshal(body)
-	if err != nil {
-		return err
-	}
 
 	// Create the HTTP request
 	client := &http.Client{}
-	req, err := http.NewRequest(method, url, bytes.NewBuffer(jsonBody))
+	req, err := http.NewRequest(method, url, nil)
 	if err != nil {
 		return err
 	}
