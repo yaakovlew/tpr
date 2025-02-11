@@ -1,15 +1,17 @@
 package api_seminarian_service
 
 import (
-	"backend/pkg/model"
-	"backend/pkg/repository"
 	"fmt"
-	"github.com/spf13/viper"
 	"io/ioutil"
 	"net/http"
 	"os"
 	"strconv"
 	"time"
+
+	"github.com/spf13/viper"
+
+	"backend/pkg/model"
+	"backend/pkg/repository"
 )
 
 type SeminarianTestAndLabService struct {

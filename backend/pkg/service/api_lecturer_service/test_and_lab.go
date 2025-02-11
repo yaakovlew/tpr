@@ -354,9 +354,9 @@ func (s *LecturerTestAndLabService) sendRequestToOpenLab(labBaseUrl string, user
 	// Define the URL without query parameters
 	url := fmt.Sprintf("%s/%s?user_id=%d&lab_id=%d", labBaseUrl, "open", userId, labId)
 	if isOpen {
-		url += "is_open=true"
+		url += "?is_open=true"
 	} else {
-		url += "is_open=false"
+		url += "?is_open=false"
 	}
 	method := "POST"
 
