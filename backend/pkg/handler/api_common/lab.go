@@ -1,13 +1,16 @@
 package api_common
 
 import (
+	"errors"
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+	log "github.com/sirupsen/logrus"
+
 	"backend/pkg/handler/error_response"
 	"backend/pkg/handler/middleware"
 	"backend/pkg/model"
 	"backend/pkg/service"
-	"errors"
-	"github.com/gin-gonic/gin"
-	"net/http"
 )
 
 type CommonLabHandler struct {
@@ -38,6 +41,7 @@ func (h *CommonLabHandler) WebhookForLab(c *gin.Context) {
 	}
 
 	if err := h.Service.ChangeLabDateAndMark(mark.UserId, mark.LabId, mark.Percentage); err != nil {
+		log.Error(err)
 		err = errors.New("ошибка изменения данных")
 		error_response.NewErrorResponse(c, http.StatusBadRequest, err.Error())
 		return
